@@ -9,6 +9,7 @@
     "dev": "concurrently \"npm run db\" \"npm run backend\" \"npm run frontend\""
   },
   "devDependencies": {
+    "@tailwindcss/line-clamp": "^0.4.4",
     "concurrently": "^8.2.2"
   },
   "repository": {
