@@ -120,7 +120,8 @@ export default function ConsorcioForm() {
   ];
 
   return (
-    <div className="max-w-lg mx-auto bg-white shadow-lg rounded-lg p-8 my-10">
+    <div className="w-full max-w-lg mx-auto bg-white shadow-lg rounded-lg p-6 sm:p-8 my-10 overflow-x-hidden">
+
       {steps[step]}
 
       {step > 0 && (

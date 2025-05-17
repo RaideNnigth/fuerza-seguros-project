@@ -38,24 +38,26 @@ export default function HeroSection() {
       </div>
 
       {/* 🌊 Ondas animadas */}
-      <div className="absolute bottom-0 left-0 w-full z-10">
+      <div className="absolute bottom-0 left-0 w-full z-10 overflow-hidden">
         <svg viewBox="0 0 1320 500" className="w-full h-[150px] wave-animated" preserveAspectRatio="none">
-          <path
-            fill="#0f172a"
-            d="M0,192 C220,100,440,100,660,192 C880,290,1100,290,1320,192 L1320 500 L0 500"
-          />
-          <path
-            fill="#f97316"
-            d="M0,192 C220,100,440,100,660,192 C880,290,1100,290,1320,192 L1320 500 L0 500"
-          />
-          <path
-            fill="#f97316"
-            fillOpacity="0.8"
-            d="M0,192 C220,100,440,100,660,192 C880,290,1100,290,1320,192 L1320 500 L0 500"
-          />
+          <g transform="translate(0, -10)">
+            <path
+              fill="#0f172a"
+              d="M0,192 C220,100,440,100,660,192 C880,290,1100,290,1320,192 L1320 500 L0 500 Z"
+            />
+            <path
+              fill="#f97316"
+              d="M0,192 C220,100,440,100,660,192 C880,290,1100,290,1320,192 L1320 500 L0 500 Z"
+            />
+            <path
+              fill="#f97316"
+              fillOpacity="0.8"
+              d="M0,192 C220,100,440,100,660,192 C880,290,1100,290,1320,192 L1320 500 L0 500 Z"
+            />
+          </g>
           <path
             fill="#fff"
-            d="M0,192 C220,100,440,100,660,192 C880,290,1100,290,1320,192 L1320 500 L0 500"
+            d="M0,192 C220,100,440,100,660,192 C880,290,1100,290,1320,192 L1320 500 L0 500 Z"
           />
         </svg>
       </div>
