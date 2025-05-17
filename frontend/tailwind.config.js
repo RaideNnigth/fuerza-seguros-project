@@ -1,10 +1,26 @@
 /** @type {import('tailwindcss').Config} */
 import lineClamp from '@tailwindcss/line-clamp';
+import textShadow from 'tailwindcss-textshadow';
 
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Novecento', 'sans-serif'], // substituirá o padrão
+      },
+      colors: {
+        fuerza: {
+          azul: '#004AAD',
+          laranja: '#F7931E',
+        },
+      },
+      textShadow: {
+        sm: '1px 1px 2px rgba(0,0,0,0.7)',
+        DEFAULT: '2px 2px 4px rgba(0,0,0,0.8)',
+        lg: '3px 3px 6px rgba(0,0,0,0.9)',
+      },
+    },
   },
-  plugins: [lineClamp],
+  plugins: [lineClamp, textShadow],
 };
