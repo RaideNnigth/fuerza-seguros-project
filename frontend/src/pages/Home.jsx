@@ -1,17 +1,10 @@
 import { Link } from 'react-router-dom';
-import { useRef } from 'react';
+
 import logo from '../assets/logo.svg';
 import HeroSection from '../components/ui/HeroSection';
+import ConsorcioForm from '../components/ui/ConsorcioForm';
 
 export default function Home() {
-  const formRef = useRef(null);
-
-  const scrollToForm = () => {
-    if (formRef.current) {
-      formRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <div className="w-full">
 
@@ -48,38 +41,7 @@ export default function Home() {
       </section>
 
       {/* Formulário direto */}
-      <section ref={formRef} className="bg-white py-16 px-4">
-        <div className="max-w-2xl mx-auto">
-          <h2 className="text-2xl font-bold text-center mb-6 text-fuerza-azul">Entre em contato agora</h2>
-          <form className="bg-gray-100 p-6 rounded-lg space-y-4 shadow">
-            <input
-              type="text"
-              placeholder="Seu nome"
-              className="w-full p-2 rounded border"
-              required
-            />
-            <input
-              type="email"
-              placeholder="Seu e-mail"
-              className="w-full p-2 rounded border"
-              required
-              defaultValue="contato@fuerzaseguros.com.br" // opcional
-            />
-            <textarea
-              rows={4}
-              placeholder="Sua mensagem"
-              className="w-full p-2 rounded border"
-              required
-            ></textarea>
-            <button
-              type="submit"
-              className="bg-fuerza-laranja text-white px-4 py-2 rounded hover:bg-orange-500"
-            >
-              Enviar
-            </button>
-          </form>
-        </div>
-      </section>
+      <ConsorcioForm/>
     </div>
   );
 }
