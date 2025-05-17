@@ -1,22 +1,28 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import Logo from '../../assets/logo.svg';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const linkClass = "text-shadow hover:text-[#de7b08] hover:scale-105 transition-transform duration-300 ease-in-out";
 
   return (
-    <header className="bg-blue-600 text-white shadow-md">
+    <header className="bg-[#00214d] text-white shadow-md">
       <div className="max-w-7xl mx-auto flex justify-between items-center px-4 py-3">
         <Link to="/" className="text-2xl font-bold">
-          Fuerza
+          <img
+            src={Logo}
+            alt="Logo Fuerza Seguros"
+            className="w-32 h-auto hover:scale-110 transition-transform duration-300 ease-in-out"
+          />
         </Link>
 
         {/* Links visíveis no desktop */}
         <nav className="hidden md:flex gap-6 font-medium">
-          <Link to="/" className="hover:text-gray-200">Home</Link>
-          <Link to="/consorcios" className="hover:text-gray-200">Consórcios</Link>
-          <Link to="/blog" className="hover:text-gray-200">Blog</Link>
-          <Link to="/landing" className="hover:text-gray-200">Landing</Link>
+          <Link to="/" className={linkClass}>home</Link>
+          <Link to="/consorcios" className={linkClass}>consórcios</Link>
+          <Link to="/blog" className={linkClass}>blog</Link>
+          <Link to="/landing" className={linkClass}>landing</Link>
         </nav>
 
         {/* Menu hambúrguer */}
@@ -30,7 +36,13 @@ export default function Navbar() {
       </div>
 
       {/* Menu lateral (mobile) */}
-      <div className={`fixed top-0 right-0 h-full w-64 bg-blue-700 z-50 transform transition-transform duration-300 ease-in-out ${open ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div   className={`
+    fixed top-0 right-0 h-full w-64
+    bg-blue-700 z-50 transform
+    transition-transform duration-300 ease-in-out
+    ${open ? 'translate-x-0' : 'translate-x-full'}
+    rounded-l-2xl shadow-lg overflow-hidden
+  `}>
         <button
           className="text-white text-2xl absolute top-4 right-4"
           onClick={() => setOpen(false)}
@@ -39,10 +51,10 @@ export default function Navbar() {
           ×
         </button>
         <nav className="flex flex-col mt-20 gap-4 px-6 text-lg">
-          <Link to="/" onClick={() => setOpen(false)}>Home</Link>
-          <Link to="/consorcios" onClick={() => setOpen(false)}>Consórcios</Link>
-          <Link to="/blog" onClick={() => setOpen(false)}>Blog</Link>
-          <Link to="/landing" onClick={() => setOpen(false)}>Landing</Link>
+          <Link to="/" onClick={() => setOpen(false)} className={linkClass}>&nbsp;🏠︎ home</Link>
+          <Link to="/consorcios" onClick={() => setOpen(false)} className={linkClass}>🤝 consórcios</Link>
+          <Link to="/blog" onClick={() => setOpen(false)} className={linkClass} >📃 blog</Link>
+          <Link to="/landing" onClick={() => setOpen(false)} className={linkClass}>📌 landing</Link>
         </nav>
       </div>
     </header>

@@ -25,6 +25,7 @@
   "homepage": "https://github.com/RaideNnigth/fuerza-seguros-project#readme",
   "description": "",
   "dependencies": {
-    "concurrently": "^9.1.2"
+    "concurrently": "^9.1.2",
+    "swiper": "^11.2.6"
   }
 }
