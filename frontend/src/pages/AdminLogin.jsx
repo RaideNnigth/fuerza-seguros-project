@@ -19,7 +19,7 @@ function AdminLogin() {
     e.preventDefault();
     setErro('');
 
-    const trimmedUser = username.trim().toLowerCase();
+    const trimmedUser = username.trim();
     const trimmedPass = password.trim();
 
     if (!isSenhaSegura(trimmedPass)) {
