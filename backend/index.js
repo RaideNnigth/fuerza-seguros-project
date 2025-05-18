@@ -24,6 +24,10 @@ app.use('/api/auth', userAuthRoutes);
 const blogPostRoutes = require('./blog_posts');
 app.use('/api/blog', blogPostRoutes);
 
+// Attachments routes
+const attachmentRoutes = require('./attachments');
+app.use('/api/attachments', attachmentRoutes);
+
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error(err));

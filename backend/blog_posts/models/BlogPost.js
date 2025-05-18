@@ -6,9 +6,13 @@ const blogPostSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  htmlContent: {
+  author: {
     type: String,
     required: true,
+  },
+  htmlContent: {
+    type: String,
+    default: "N/A",
   },
   views: {
     type: Number,
