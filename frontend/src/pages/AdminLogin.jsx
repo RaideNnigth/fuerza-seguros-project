@@ -38,7 +38,7 @@ function AdminLogin() {
 
       const data = await res.json();
       localStorage.setItem('token', data.token);
-      navigate('/admin/dashboard');
+      navigate('/admin/admindashboard');
     } catch (err) {
       setErro(err.message);
     }
