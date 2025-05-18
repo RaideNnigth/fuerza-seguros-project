@@ -3,10 +3,11 @@ const BlogPost = require('../models/BlogPost');
 // Criar novo post
 exports.createPost = async (req, res) => {
   try {
-    const { title, htmlContent, tags } = req.body;
+    const { title, htmlContent, tags, author } = req.body;
     const newPost = new BlogPost({ 
       title, 
       htmlContent,
+      author,
       tags: tags || [],
     });
     await newPost.save();

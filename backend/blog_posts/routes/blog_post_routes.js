@@ -9,5 +9,4 @@ router.get('/:id', blogPostController.getPostById);
 router.delete('/:id', verifyToken, blogPostController.deletePost);
 router.get('/tags/:tag', blogPostController.getPostsByTag);
 
-
 module.exports = router;
