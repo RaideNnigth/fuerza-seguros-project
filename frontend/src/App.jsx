@@ -10,6 +10,7 @@ import Consorcios from './pages/Consorcios';
 import Blog from './pages/Blog';
 import Landing from './pages/Landing';
 import AdminLogin from './pages/AdminLogin';
+import AdminDashBoard from './pages/AdminDashboard';
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
           <Route path="/blog/:slug" element={<ArticleView />} />
           <Route path="/landing" element={<Landing />} />
           <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<AdminDashBoard />} />
         </Routes>
       </main>
       <Footer />
