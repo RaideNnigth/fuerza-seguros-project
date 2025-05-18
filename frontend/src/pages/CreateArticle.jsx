@@ -55,6 +55,16 @@ export default function CreateArticle() {
                 coverId = uploadData.id || uploadData._id;
             }
 
+            const payload = {
+                title,
+                tags: tags.split(',').map(tag => tag.trim()).filter(Boolean),
+                htmlContent: content,
+                cover: coverId,
+                author: 'Gustavo',
+            };
+
+            console.log('🔍 Payload enviado:', payload);
+
             const res = await fetch(`${API_URL}/api/blog`, {
                 method: 'POST',
                 headers: {
