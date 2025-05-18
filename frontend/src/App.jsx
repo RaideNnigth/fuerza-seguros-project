@@ -9,6 +9,7 @@ import Home from './pages/Home';
 import Consorcios from './pages/Consorcios';
 import Blog from './pages/Blog';
 import Landing from './pages/Landing';
+import AdminLogin from './pages/AdminLogin';
 
 function App() {
 
@@ -17,11 +18,12 @@ function App() {
       <Navbar />
       <main style={{ minHeight: '80vh' }}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home />} /> 
           <Route path="/consorcios" element={<Consorcios />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<ArticleView />} />
           <Route path="/landing" element={<Landing />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
         </Routes>
       </main>
       <Footer />
