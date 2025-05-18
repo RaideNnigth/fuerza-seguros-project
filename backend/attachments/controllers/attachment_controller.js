@@ -69,7 +69,10 @@ exports.getAttachmentsByFilename = async (req, res) => {
   try {
     const filename = req.params.name;
 
-    const attachments = await Attachment.find({ filename }).sort({ uploadedAt: -1 });
+    // Expressão regular para buscar "tipo LIKE", case-insensitive
+    const regex = new RegExp(filename, 'i');
+
+    const attachments = await Attachment.find({ filename: regex }).sort({ uploadedAt: -1 });
 
     if (attachments.length === 0) {
       return res.status(404).json({ message: 'Nenhum anexo encontrado com esse nome' });
