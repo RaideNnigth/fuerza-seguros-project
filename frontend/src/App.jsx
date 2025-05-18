@@ -11,6 +11,10 @@ import Blog from './pages/Blog';
 import Landing from './pages/Landing';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashBoard from './pages/AdminDashboard';
+import CreateArticle from './pages/CreateArticle'
+
+import PrivateRoute from './components/auth/PrivateRoute';
+
 
 function App() {
 
@@ -25,7 +29,14 @@ function App() {
           <Route path="/blog/:slug" element={<ArticleView />} />
           <Route path="/landing" element={<Landing />} />
           <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin/dashboard" element={<AdminDashBoard />} />
+
+          {/* 🔐 Rotas protegidas */}
+          <Route path="/admin/dashboard" element={
+            <PrivateRoute><AdminDashBoard /></PrivateRoute>
+          } />
+          <Route path="/admin/create-article" element={
+            <PrivateRoute><CreateArticle /></PrivateRoute>
+          } />
         </Routes>
       </main>
       <Footer />

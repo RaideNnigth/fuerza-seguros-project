@@ -42,7 +42,12 @@ fuser -k 3000/tcp 5173/tcp 2>/dev/null
 # Iniciar MongoDB (se ainda não estiver rodando)
 if ! pgrep -f "mongod" > /dev/null; then
   echo "🟢 Iniciando MongoDB..."
-  mongod --dbpath ./data --fork --logpath ./mongod.log
+  mkdir -p ./data  # ← ESSENCIAL
+  mongod --dbpath ./data --fork --logpath ./mongod.log || {
+    echo "❌ Falha ao iniciar MongoDB. Veja mongod.log para detalhes."
+    tail -n 10 mongod.log
+    exit 1
+  }
   echo $! > "$MONGO_PID_FILE"
 else
   echo "📦 MongoDB já está rodando."

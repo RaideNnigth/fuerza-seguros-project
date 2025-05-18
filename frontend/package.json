@@ -11,7 +11,15 @@
     "tailwind:init": "tailwindcss init -p"
   },
   "dependencies": {
+    "@tiptap/extension-color": "^2.12.0",
+    "@tiptap/extension-heading": "^2.12.0",
+    "@tiptap/extension-link": "^2.12.0",
+    "@tiptap/extension-text-align": "^2.12.0",
+    "@tiptap/extension-text-style": "^2.12.0",
+    "@tiptap/react": "^2.12.0",
+    "@tiptap/starter-kit": "^2.12.0",
     "keen-slider": "^6.8.6",
+    "quill": "^2.0.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.0",
