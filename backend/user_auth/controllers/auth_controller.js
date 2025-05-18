@@ -53,4 +53,27 @@ const getProfile = async (req, res) => {
   res.json(req.user);
 };
 
-module.exports = { registerUser, loginUser, refreshToken, getProfile };
+const verifyToken = async (req, res) => {
+  // Aqui vamos usar o token que estará no header Authorization
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ msg: 'Token não fornecido' });
+  }
+
+  const token = authHeader.split(' ')[1];
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id).select('-password');
+    if (!user) {
+      return res.status(401).json({ msg: 'Usuário não encontrado' });
+    }
+    // Se chegou aqui, está tudo certo!
+    res.status(200).json({ msg: 'Token válido', user });
+  } catch (err) {
+    res.status(401).json({ msg: 'Token inválido ou expirado' });
+  }
+};
+
+module.exports = { registerUser, loginUser, refreshToken, getProfile, verifyToken };
