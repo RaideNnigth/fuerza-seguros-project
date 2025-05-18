@@ -3,8 +3,18 @@ const { generateToken, generateRefreshToken } = require('../config/generate_toke
 const jwt = require('jsonwebtoken');
 
 const registerUser = async (req, res) => {
+  const { username, password } = req.body;
+
+  // 🔐 Validação de senha forte
+  const senhaSeguraRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+  if (!senhaSeguraRegex.test(password)) {
+    return res.status(400).json({
+      msg: 'A senha deve conter no mínimo 8 caracteres, incluindo letras maiúsculas, minúsculas, números e símbolos.'
+    });
+  }
+
   try {
-    const user = new User(req.body);
+    const user = new User({ username, password });
     await user.save();
     res.status(201).json({ msg: 'Usuário registrado com sucesso' });
   } catch (err) {
