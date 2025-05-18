@@ -7,20 +7,22 @@ const cors = require('cors');
 const https = require('https');
 const fs = require('fs');
 
-// User authentication routes
-const userAuthRoutes = require('./user_auth');
-
 const sslOptions = {
   key: fs.readFileSync('./cert/key.pem'),
   cert: fs.readFileSync('./cert/cert.pem'),
 };
 
 const app = express();
-
 app.use(cors());
 app.use(express.json());
-app.use('/auth', userAuthRoutes); 
 
+// User authentication routes
+const userAuthRoutes = require('./user_auth');
+app.use('/api/auth', userAuthRoutes); 
+
+// Blog post routes
+const blogPostRoutes = require('./blog_posts');
+app.use('/api/blog', blogPostRoutes);
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('Connected to MongoDB'))
