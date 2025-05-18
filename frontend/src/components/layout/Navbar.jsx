@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Logo from '../../assets/logo.svg';
+import Logo from '../../assets/images/logo.svg';
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);

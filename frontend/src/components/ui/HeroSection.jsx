@@ -1,4 +1,4 @@
-import banner_img from '../../assets/handshake-homepage.jpg'
+import banner_img from '../../assets/images/handshake-homepage.jpg'
 
 export default function HeroSection() {
   return (

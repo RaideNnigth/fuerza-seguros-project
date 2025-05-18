@@ -11,6 +11,7 @@ import Blog from './pages/Blog';
 import Landing from './pages/Landing';
 
 function App() {
+
   return (
     <>
       <Navbar />

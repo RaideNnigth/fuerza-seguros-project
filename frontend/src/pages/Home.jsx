@@ -1,6 +1,3 @@
-import { Link } from 'react-router-dom';
-
-import logo from '../assets/logo.svg';
 import HeroSection from '../components/ui/HeroSection';
 import ConsorcioForm from '../components/ui/ConsorcioForm';
 import ConsorcioCarousel from '../components/ui/ConsorcioCarousel';

@@ -1,9 +1,36 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import articles from '../../mocks/mockArticles';
+import API_URL from '../../config/api';
 
-export default function RelatedPosts({ category }) {
-  // Exibe os primeiros 3 artigos da mesma categoria (excluindo o atual)
-  const related = articles.filter(a => a.category === category).slice(0, 3);
+export default function RelatedPosts({ category, currentId }) {
+  
+  const [related, setRelated] = useState([]);
+
+  useEffect(() => {
+    async function fetchRelated() {
+      try {
+        const res = await fetch(`${API_URL}/api/blog/tags/${category}`);
+        const data = await res.json();
+
+        const filtered = data
+          .filter((post) => post._id !== currentId) // ← descarta o artigo atual
+          .slice(0, 3) // pega até 3 relacionados
+          .map((post) => ({
+            slug: post._id,
+            title: post.title,
+            excerpt: post.htmlContent?.slice(0, 120) + '...',
+          }));
+
+        setRelated(filtered);
+      } catch (err) {
+        console.error('Erro ao buscar artigos relacionados:', err);
+      }
+    }
+
+    if (category) fetchRelated();
+  }, [category, currentId]);
+
+  if (related.length === 0) return null;
 
   return (
     <section className="mt-16">
@@ -18,7 +45,10 @@ export default function RelatedPosts({ category }) {
             <h3 className="text-md font-semibold text-gray-800 mb-2">
               {post.title}
             </h3>
-            <p className="text-sm text-gray-600 line-clamp-3">{post.excerpt}</p>
+            <div
+              className="text-sm text-gray-600 line-clamp-3"
+              dangerouslySetInnerHTML={{ __html: post.excerpt }}
+            />
           </Link>
         ))}
       </div>

@@ -1,19 +1,47 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import API_URL from '../../config/api'; // ou ajuste o caminho conforme sua organização
+
 import Carousel from './Carousel';
 import RelatedPosts from './RelatedPosts';
 import ContactForm from './ContactForm';
-import articles from '../../mocks/mockArticles';
 
 export default function ArticleView() {
   const { slug } = useParams();
-
-  // Busca o artigo correto pelo slug
-  const article = articles.find(a => a.slug === slug);
+  const [article, setArticle] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    async function fetchArticle() {
+      try {
+        const res = await fetch(`${API_URL}/api/blog/${slug}`);
+        const data = await res.json();
+
+        setArticle({
+          _id : data._id,
+          title: data.title,
+          html: data.htmlContent,
+          category: data.tags?.[0] || 'Blog',
+          date: new Date(data.createdAt).toLocaleDateString('pt-BR'),
+          author: data.author || 'Equipe Fuerza',
+          headings: [], // se quiser extrair do HTML, precisa parsear
+          images: [],   // idem
+        });
+
+        setLoading(false);
+      } catch (err) {
+        console.error('Erro ao buscar artigo:', err);
+        setLoading(false);
+      }
+    }
+
+    fetchArticle();
     window.scrollTo(0, 0);
-  }, []);
+  }, [slug]);
+
+  if (loading) {
+    return <div className="text-center py-20">Carregando...</div>;
+  }
 
   if (!article) {
     return (
@@ -29,7 +57,7 @@ export default function ArticleView() {
       <h1 className="text-3xl font-bold mb-4">{article.title}</h1>
       <p className="text-sm text-gray-500 mb-6">Por {article.author} em {article.date}</p>
 
-      {article.headings?.length > 0 && (
+      {article.headings.length > 0 && (
         <nav className="mb-8 bg-gray-100 p-4 rounded-lg">
           <h2 className="text-sm font-bold mb-2">Índice</h2>
           <ul className="list-disc list-inside text-sm text-blue-700 space-y-1">
@@ -40,14 +68,15 @@ export default function ArticleView() {
         </nav>
       )}
 
-      {article.images && article.images.length > 0 && <Carousel images={article.images} />}
+      {article.images.length > 0 && <Carousel images={article.images} />}
 
       <div
         className="prose prose-blue max-w-none"
         dangerouslySetInnerHTML={{ __html: article.html }}
       />
 
-      <RelatedPosts category={article.category} />
+      <RelatedPosts category={article.category} currentId={article._id} />
+
       <ContactForm />
     </article>
   );

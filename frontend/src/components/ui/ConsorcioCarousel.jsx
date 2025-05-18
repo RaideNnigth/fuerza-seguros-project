@@ -3,7 +3,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import BlogCard from './BlogCard';
 
-import car_img from '../../assets/carro.png'
+import car_img from '../../assets/images/carro.png'
 
 export default function ConsorcioCarousel() {
   const [consorcios, setConsorcios] = useState([]);

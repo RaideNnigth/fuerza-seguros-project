@@ -1,93 +1,36 @@
+import { useEffect, useState } from 'react';
 import BlogCard from '../components/ui/BlogCard';
+import API_URL from '../config/api';
 
-import img1 from '../assets/1.jpeg';
-import img2 from '../assets/2.jpeg';
-
-const posts = [
-  {
-    image: img1,
-    category: 'Seguros',
-    title: 'Quais as Coberturas de Seguro Empresarial?',
-    excerpt: 'Neste artigo, apresentamos para você quais as coberturas do seguro empresarial e como você pode proteger seu negócio contra imprevistos financeiros.',
-    author: 'Márcio Tavares',
-    date: '26/09/2023'
-  },
-  {
-    image: img2,
-    category: 'Seguros',
-    title: 'Seguro Empresarial: Entenda Como Funciona',
-    excerpt: 'Você descobre como o seguro empresarial funciona e as coberturas e os benefícios que oferece.',
-    author: 'Márcio Tavares',
-    date: '23/09/2023'
-  },
-    {
-    image: img1,
-    category: 'Seguros',
-    title: 'Quais as Coberturas de Seguro Empresarial?',
-    excerpt: 'Neste artigo, apresentamos para você quais as coberturas do seguro empresarial e como você pode proteger seu negócio contra imprevistos financeiros.',
-    author: 'Márcio Tavares',
-    date: '26/09/2023'
-  },
-  {
-    image: img2,
-    category: 'Seguros',
-    title: 'Seguro Empresarial: Entenda Como Funciona',
-    excerpt: 'Você descobre como o seguro empresarial funciona e as coberturas e os benefícios que oferece.',
-    author: 'Márcio Tavares',
-    date: '23/09/2023'
-  },
-    {
-    image: img1,
-    category: 'Seguros',
-    title: 'Quais as Coberturas de Seguro Empresarial?',
-    excerpt: 'Neste artigo, apresentamos para você quais as coberturas do seguro empresarial e como você pode proteger seu negócio contra imprevistos financeiros.',
-    author: 'Márcio Tavares',
-    date: '26/09/2023'
-  },
-  {
-    image: img2,
-    category: 'Seguros',
-    title: 'Seguro Empresarial: Entenda Como Funciona',
-    excerpt: 'Você descobre como o seguro empresarial funciona e as coberturas e os benefícios que oferece.',
-    author: 'Márcio Tavares',
-    date: '23/09/2023'
-  },
-    {
-    image: img1,
-    category: 'Seguros',
-    title: 'Quais as Coberturas de Seguro Empresarial?',
-    excerpt: 'Neste artigo, apresentamos para você quais as coberturas do seguro empresarial e como você pode proteger seu negócio contra imprevistos financeiros.',
-    author: 'Márcio Tavares',
-    date: '26/09/2023'
-  },
-  {
-    image: img2,
-    category: 'Seguros',
-    title: 'Seguro Empresarial: Entenda Como Funciona',
-    excerpt: 'Você descobre como o seguro empresarial funciona e as coberturas e os benefícios que oferece.',
-    author: 'Márcio Tavares',
-    date: '23/09/2023'
-  },
-    {
-    image: img1,
-    category: 'Seguros',
-    title: 'Quais as Coberturas de Seguro Empresarial?',
-    excerpt: 'Neste artigo, apresentamos para você quais as coberturas do seguro empresarial e como você pode proteger seu negócio contra imprevistos financeiros.',
-    author: 'Márcio Tavares',
-    date: '26/09/2023'
-  },
-  {
-    image: img2,
-    category: 'Seguros',
-    title: 'Seguro Empresarial: Entenda Como Funciona',
-    excerpt: 'Você descobre como o seguro empresarial funciona e as coberturas e os benefícios que oferece.',
-    author: 'Márcio Tavares',
-    date: '23/09/2023'
-  },
-  // adicione mais posts
-];
+import DEFAULT_THUMBNAIL from '../assets/images/default-thumbnail.png'
 
 export default function Blog() {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    async function fetchPosts() {
+      try {
+        const res = await fetch(`${API_URL}/api/blog`);
+        const data = await res.json();
+
+        const mapped = data.map((post) => ({
+          _id: post._id,
+          image: post.image || DEFAULT_THUMBNAIL,
+          category: post.tags?.[0] || 'Blog',
+          title: post.title,
+          excerpt: post.htmlContent?.slice(0, 120) + '...',
+          author: post.author || 'Equipe Fuerza',
+          date: new Date(post.createdAt).toLocaleDateString('pt-BR'),
+        }));
+        setPosts(mapped);
+      } catch (err) {
+        console.error('Erro ao buscar posts:', err);
+      }
+    }
+
+    fetchPosts();
+  }, []);
+
   return (
     <section className="max-w-7xl mx-auto px-4 py-10">
       <h1 className="text-2xl font-bold mb-6 text-center">Últimos Artigos</h1>
