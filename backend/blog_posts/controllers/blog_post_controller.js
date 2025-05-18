@@ -3,19 +3,23 @@ const BlogPost = require('../models/BlogPost');
 // Criar novo post
 exports.createPost = async (req, res) => {
   try {
-    const { title, htmlContent, tags, author } = req.body;
-    const newPost = new BlogPost({ 
-      title, 
+    const { title, htmlContent, tags, cover, author } = req.body;
+
+    const newPost = new BlogPost({
+      title,
       htmlContent,
-      author,
+      author: author || 'Equipe Fuerza',
       tags: tags || [],
+      cover: cover || null
     });
+
     await newPost.save();
     res.status(201).json(newPost);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
+
 
 // Listar todos os posts
 exports.getAllPosts = async (req, res) => {
@@ -30,8 +34,9 @@ exports.getPostById = async (req, res) => {
       req.params.id,
       { $inc: { views: 1 } },
       { new: true }
-    );
-    if (!post) return res.status(404).json({ message: 'Post not found' });
+    ).populate('cover'); // ← aqui
+
+    if (!post) return res.status(404).json({ message: 'Post não encontrado' });
     res.json(post);
   } catch (err) {
     res.status(400).json({ message: err.message });
