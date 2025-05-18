@@ -15,10 +15,10 @@ export default function Blog() {
 
         const mapped = data.map((post) => ({
           _id: post._id,
-          image: post.image || DEFAULT_THUMBNAIL,
-          category: post.tags?.[0] || 'Blog',
-          title: post.title,
-          excerpt: post.htmlContent?.slice(0, 120) + '...',
+          image: `${API_URL}/api/attachments/${post.cover}` || DEFAULT_THUMBNAIL,
+          category: post.tags?.[0].toLowerCase() || 'Blog',
+          title: post.title.toLowerCase(),
+          excerpt: post.htmlContent?.slice(0, 120).toLowerCase() + '...',
           author: post.author || 'Equipe Fuerza',
           date: new Date(post.createdAt).toLocaleDateString('pt-BR'),
         }));
