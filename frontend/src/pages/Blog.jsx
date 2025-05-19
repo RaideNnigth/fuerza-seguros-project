@@ -14,14 +14,14 @@ export default function Blog() {
         const data = await res.json();
 
         const mapped = data.map((post) => ({
-          _id: post._id,
-          image: `${API_URL}/api/attachments/${post.cover}` || DEFAULT_THUMBNAIL,
-          category: post.tags?.[0].toLowerCase() || 'Blog',
-          title: post.title.toLowerCase(),
-          excerpt: post.htmlContent?.slice(0, 120).toLowerCase() + '...',
-          author: post.author || 'Equipe Fuerza',
-          date: new Date(post.createdAt).toLocaleDateString('pt-BR'),
-        }));
+        _id: post._id,
+        image: post.cover ? `${API_URL}/api/attachments/${post.cover}`: DEFAULT_THUMBNAIL,
+        category: (post.tags && post.tags[0] ? post.tags[0].toLowerCase() : 'blog'),
+        title: (post.title ? post.title.toLowerCase() : 'sem título'),
+        excerpt: (post.htmlContent ? post.htmlContent.slice(0, 120).toLowerCase() : '') + '...',
+        author: post.author || 'Equipe Fuerza',
+        date: post.createdAt ? new Date(post.createdAt).toLocaleDateString('pt-BR') : '',
+      }));
         setPosts(mapped);
       } catch (err) {
         console.error('Erro ao buscar posts:', err);
