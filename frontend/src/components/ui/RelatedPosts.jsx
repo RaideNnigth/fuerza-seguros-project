@@ -34,7 +34,7 @@ export default function RelatedPosts({ category, currentId }) {
 
   return (
     <section className="mt-16">
-      <h2 className="text-xl font-bold mb-6">Artigos Relacionados</h2>
+      <h2 className="text-xl font-bold mb-6">artigos relacionados</h2>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {related.map((post, idx) => (
           <Link

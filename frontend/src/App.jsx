@@ -8,7 +8,6 @@ import ArticleView from './components/ui/ArticleView';
 import Home from './pages/Home';
 import Consorcios from './pages/Consorcios';
 import Blog from './pages/Blog';
-import Landing from './pages/Landing';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashBoard from './pages/AdminDashboard';
 import CreateArticle from './pages/CreateArticle'
@@ -27,7 +26,6 @@ function App() {
           <Route path="/consorcios" element={<Consorcios />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<ArticleView />} />
-          <Route path="/landing" element={<Landing />} />
           <Route path="/admin/login" element={<AdminLogin />} />
 
           {/* 🔐 Rotas protegidas */}

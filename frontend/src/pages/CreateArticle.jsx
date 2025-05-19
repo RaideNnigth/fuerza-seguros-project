@@ -7,7 +7,7 @@ import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
 import TextStyle from '@tiptap/extension-text-style';
 import Color from '@tiptap/extension-color';
-import Image from '@tiptap/extension-image'; // <-- ESSENCIAL!
+import Image from '@tiptap/extension-image';
 
 import EditorToolbar from '../components/ui/EditorToolbar';
 import ImageAttachmentPicker from '../components/ui/ImageAttachmentPicker';
@@ -44,7 +44,7 @@ export default function CreateArticle() {
   const editor = useEditor({
     extensions: [
       StarterKit,
-      Image,       // <----------------- ESSENCIAL!
+      Image,
       Link,
       TextStyle,
       Color,
@@ -59,7 +59,7 @@ export default function CreateArticle() {
   function handleInsertImageFromAttachments(att) {
     if (editor) {
       editor.commands.insertContent(
-        `<img src="/api/attachments/${att._id}" alt="${att.filename}" style="max-width:100%" />`
+        `<img src="${API_URL}/api/attachments/${att._id}" alt="${att.filename}" style="max-width:100%" />`
       );
     }
     setShowImagePicker(false);

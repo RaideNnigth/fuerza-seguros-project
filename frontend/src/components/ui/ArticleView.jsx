@@ -54,8 +54,8 @@ export default function ArticleView() {
 
   return (
     <article className="max-w-4xl mx-auto px-4 py-10">
-      <h1 className="text-3xl font-bold mb-4">{article.title}</h1>
-      <p className="text-sm text-gray-500 mb-6">Por {article.author} em {article.date}</p>
+      <h1 style={{ fontFamily: '"Times New Roman", Times, serif' }} className="text-3xl font-bold mb-4">{article.title}</h1>
+      <p style={{ fontFamily: '"Times New Roman", Times, serif' }} className="text-sm text-gray-500 mb-6">Por {article.author} em {article.date}</p>
 
       {article.headings.length > 0 && (
         <nav className="mb-8 bg-gray-100 p-4 rounded-lg">
@@ -72,6 +72,7 @@ export default function ArticleView() {
 
       <div
         className="prose prose-blue max-w-none"
+        style={{ fontFamily: '"Times New Roman", Times, serif' }}
         dangerouslySetInnerHTML={{ __html: article.html }}
       />
 

@@ -22,7 +22,6 @@ export default function Navbar() {
           <Link to="/" className={linkClass}>home</Link>
           <Link to="/consorcios" className={linkClass}>consórcios</Link>
           <Link to="/blog" className={linkClass}>blog</Link>
-          <Link to="/landing" className={linkClass}>landing</Link>
         </nav>
 
         {/* Menu hambúrguer */}
@@ -37,12 +36,12 @@ export default function Navbar() {
 
       {/* Menu lateral (mobile) */}
       <div   className={`
-    fixed top-0 right-0 h-full w-64
-    bg-blue-700 z-50 transform
-    transition-transform duration-300 ease-in-out
-    ${open ? 'translate-x-0' : 'translate-x-full'}
-    rounded-l-2xl shadow-lg overflow-hidden
-  `}>
+        fixed top-0 right-0 h-full w-64
+        bg-blue-700 z-50 transform
+        transition-transform duration-300 ease-in-out
+        ${open ? 'translate-x-0' : 'translate-x-full'}
+        rounded-l-2xl shadow-lg overflow-hidden
+      `}>
         <button
           className="text-white text-2xl absolute top-4 right-4"
           onClick={() => setOpen(false)}
@@ -54,7 +53,6 @@ export default function Navbar() {
           <Link to="/" onClick={() => setOpen(false)} className={linkClass}>&nbsp;🏠︎ home</Link>
           <Link to="/consorcios" onClick={() => setOpen(false)} className={linkClass}>🤝 consórcios</Link>
           <Link to="/blog" onClick={() => setOpen(false)} className={linkClass} >📃 blog</Link>
-          <Link to="/landing" onClick={() => setOpen(false)} className={linkClass}>📌 landing</Link>
         </nav>
       </div>
     </header>
