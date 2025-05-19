@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AttachmentManager from "../components/ui/AttachmentManager";
+import CreateArticle from "./CreateArticle";
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -23,19 +24,25 @@ function AdminDashboard() {
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar para telas grandes */}
       <aside className="bg-gray-900 text-white w-60 flex-col p-6 hidden md:flex">
-        <h2 className="text-lg font-bold mb-8 tracking-wider uppercase text-center">Painel Admin</h2>
+        <h2 className="text-lg font-bold mb-8 tracking-wider uppercase text-center">painel admin</h2>
         <button
           className={`mb-4 px-4 py-2 rounded w-full ${section === 'attachments' ? 'bg-gray-700' : 'hover:bg-gray-800'}`}
           onClick={() => setSection('attachments')}
         >
-          Gerenciar Attachments
+          gerenciar anexos
+        </button>
+        <button
+          className={`mb-4 px-4 py-2 rounded w-full ${section === 'create' ? 'bg-gray-700' : 'hover:bg-gray-800'}`}
+          onClick={() => setSection('create')}
+        >
+          criar artigo
         </button>
         <div className="flex-grow"></div>
         <button
           onClick={handleLogout}
           className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 mt-4 w-full"
         >
-          Sair
+          sair
         </button>
       </aside>
 
@@ -49,15 +56,12 @@ function AdminDashboard() {
             <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
-        {/* Overlay sidebar */}
         {sidebarOpen && (
           <div className="fixed inset-0 z-40 flex">
-            {/* Overlay background */}
             <div
               className="fixed inset-0 bg-black bg-opacity-40"
               onClick={() => setSidebarOpen(false)}
             />
-            {/* Sidebar modal */}
             <aside className="relative bg-gray-900 text-white w-60 flex-col p-6 h-full z-50 animate-slide-in-left">
               <button
                 className="absolute right-4 top-4 text-white"
@@ -68,19 +72,25 @@ function AdminDashboard() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
-              <h2 className="text-lg font-bold mb-8 tracking-wider uppercase text-center">Painel Admin</h2>
+              <h2 className="text-lg font-bold mb-8 tracking-wider uppercase text-center">painel admin</h2>
               <button
                 className={`mb-4 px-4 py-2 rounded w-full ${section === 'attachments' ? 'bg-gray-700' : 'hover:bg-gray-800'}`}
                 onClick={() => { setSection('attachments'); setSidebarOpen(false); }}
               >
-                Gerenciar Attachments
+                gerenciar anexos
+              </button>
+              <button
+                className={`mb-4 px-4 py-2 rounded w-full ${section === 'create' ? 'bg-gray-700' : 'hover:bg-gray-800'}`}
+                onClick={() => { setSection('create'); setSidebarOpen(false); }}
+              >
+                criar artigo
               </button>
               <div className="flex-grow"></div>
               <button
                 onClick={handleLogout}
                 className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 mt-4 w-full"
               >
-                Sair
+                sair
               </button>
             </aside>
           </div>
@@ -90,6 +100,7 @@ function AdminDashboard() {
       {/* Conteúdo principal */}
       <main className="flex-1 p-2 md:p-8">
         {section === 'attachments' && <AttachmentManager />}
+        {section === 'create' && <CreateArticle />}
         {/* Adicione mais módulos depois */}
       </main>
 

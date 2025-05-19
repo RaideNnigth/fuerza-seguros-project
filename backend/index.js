@@ -36,6 +36,6 @@ app.get('/', (req, res) => {
   res.send('Fuerza Seguros API Running!');
 });
 
-https.createServer(sslOptions, app).listen(process.env.PORT, () => {
+https.createServer(sslOptions, app).listen(process.env.PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${process.env.PORT}`);
 });

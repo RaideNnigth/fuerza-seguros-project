@@ -12,14 +12,13 @@ export default function AttachmentManager() {
   const [totalPages, setTotalPages] = useState(1);
   const fileInputRef = useRef();
 
-  // Preview da imagem em upload
   useEffect(() => {
     if (!file) {
       setPreview(null);
       setCustomFilename('');
       return;
     }
-    setCustomFilename(file.name.replace(/\.[^/.]+$/, "")); // Seta o nome sem extensão
+    setCustomFilename(file.name.replace(/\.[^/.]+$/, ''));
     if (file.type.startsWith('image/')) {
       const objectUrl = URL.createObjectURL(file);
       setPreview(objectUrl);
@@ -29,7 +28,6 @@ export default function AttachmentManager() {
     }
   }, [file]);
 
-  // Função para buscar attachments
   const fetchAttachments = async (searchValue = search, pageValue = page) => {
     setLoading(true);
     const token = localStorage.getItem('token');
@@ -48,13 +46,11 @@ export default function AttachmentManager() {
     setLoading(false);
   };
 
-  // useEffect padrão
   useEffect(() => {
     fetchAttachments();
     // eslint-disable-next-line
   }, [search, page]);
 
-  // Upload handler
   const handleUpload = async (e) => {
     e.preventDefault();
     if (!file) return;
@@ -75,15 +71,14 @@ export default function AttachmentManager() {
     setCustomFilename('');
     setLoading(false);
     if (res.ok) {
-      // Agora recarrega imediatamente
       fetchAttachments();
     } else {
-      alert('Falha ao enviar arquivo');
+      alert('falha ao enviar arquivo');
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Tem certeza que deseja deletar?')) return;
+    if (!window.confirm('tem certeza que deseja deletar?')) return;
     setLoading(true);
     const token = localStorage.getItem('token');
     await fetch(`${API_URL}/api/attachments/${id}`, {
@@ -105,19 +100,19 @@ export default function AttachmentManager() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto w-full p-4">
-      <h2 className="text-xl font-bold mb-4">Gerenciador de Attachments</h2>
+    <div className="max-w-3xl mx-auto w-full p-4 lowercase">
+      <h2 className="text-xl font-bold mb-4">gerenciador de attachments</h2>
       <form onSubmit={handleUpload} className="flex flex-col md:flex-row items-center gap-4 mb-8 bg-white p-4 rounded-lg shadow">
         <div className="flex flex-col items-center gap-2 w-40">
           {preview ? (
             <img
               src={preview}
-              alt="Pré-visualização"
+              alt="pré-visualização"
               className="w-28 h-28 object-cover rounded-lg border"
             />
           ) : (
             <div className="w-28 h-28 flex items-center justify-center rounded-lg border bg-gray-100 text-gray-400 text-xs">
-              Sem preview
+              sem preview
             </div>
           )}
           <button
@@ -125,7 +120,7 @@ export default function AttachmentManager() {
             onClick={handleChooseFile}
             className="w-full px-3 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
           >
-            Escolher arquivo
+            escolher arquivo
           </button>
           <input
             type="file"
@@ -134,16 +129,18 @@ export default function AttachmentManager() {
             onChange={e => setFile(e.target.files[0])}
             accept="image/*"
           />
-          <span className="text-xs text-gray-500 break-all">{file ? file.name : "Nenhum arquivo selecionado"}</span>
+          <span className="text-xs text-gray-500 break-all">
+            {file ? file.name.toLowerCase() : "nenhum arquivo selecionado"}
+          </span>
         </div>
         <div className="flex flex-col gap-2 flex-1 w-full">
           {file && (
             <input
               type="text"
-              value={customFilename}
+              value={customFilename.toLowerCase()}
               onChange={e => setCustomFilename(e.target.value)}
               className="w-full p-2 border rounded"
-              placeholder="Nome do arquivo (sem extensão)"
+              placeholder="nome do arquivo (sem extensão)"
             />
           )}
           <button
@@ -151,7 +148,7 @@ export default function AttachmentManager() {
             disabled={loading || !file}
             className="w-full px-4 py-2 rounded font-semibold transition bg-green-600 text-white hover:bg-green-700 disabled:opacity-50"
           >
-            Fazer Upload
+            fazer upload
           </button>
           {file && (
             <button
@@ -159,19 +156,19 @@ export default function AttachmentManager() {
               onClick={() => { setFile(null); setPreview(null); setCustomFilename(''); }}
               className="w-full px-4 py-2 rounded font-semibold transition bg-gray-200 text-gray-700 hover:bg-gray-300"
             >
-              Cancelar Upload
+              cancelar upload
             </button>
           )}
         </div>
       </form>
 
       <input
-        placeholder="Pesquisar por nome"
-        value={search}
+        placeholder="pesquisar por nome"
+        value={search.toLowerCase()}
         onChange={e => { setSearch(e.target.value); setPage(0); }}
         className="w-full mb-6 p-2 rounded border"
       />
-      {loading && <div>Carregando...</div>}
+      {loading && <div>carregando...</div>}
 
       <ul className="space-y-4">
         {attachments.map(att => (
@@ -181,7 +178,7 @@ export default function AttachmentManager() {
                 <a href={`${API_URL}/api/attachments/${att._id}`} target="_blank" rel="noopener noreferrer">
                   <img
                     src={att.base64 ? att.base64 : `${API_URL}/api/attachments/${att._id}`}
-                    alt={att.filename}
+                    alt={att.filename?.toLowerCase()}
                     className="w-16 h-16 object-cover rounded border"
                   />
                 </a>
@@ -198,14 +195,14 @@ export default function AttachmentManager() {
                 rel="noopener noreferrer"
                 className="font-semibold text-gray-800 hover:underline break-all"
               >
-                {att.filename}
+                {att.filename?.toLowerCase()}
               </a>
               <div className="flex gap-2 mt-2">
                 <button
                   onClick={() => handleDelete(att._id)}
                   className="px-3 py-1 rounded bg-red-600 text-white text-sm hover:bg-red-700 transition"
                 >
-                  Deletar
+                  deletar
                 </button>
                 <a
                   href={`${API_URL}/api/attachments/${att._id}`}
@@ -213,7 +210,7 @@ export default function AttachmentManager() {
                   rel="noopener noreferrer"
                   className="px-3 py-1 rounded bg-green-600 text-white text-sm hover:bg-green-700 transition"
                 >
-                  Download
+                  download
                 </a>
               </div>
             </div>
@@ -228,15 +225,17 @@ export default function AttachmentManager() {
             onClick={() => setPage(page - 1)}
             className="px-4 py-2 rounded bg-gray-200 text-gray-600 font-semibold hover:bg-gray-300 disabled:opacity-50"
           >
-            Anterior
+            anterior
           </button>
-          <span className="text-gray-700">Página {page + 1} de {totalPages}</span>
+          <span className="text-gray-700">
+            página {page + 1} de {totalPages}
+          </span>
           <button
             disabled={page + 1 >= totalPages}
             onClick={() => setPage(page + 1)}
             className="px-4 py-2 rounded bg-gray-200 text-gray-600 font-semibold hover:bg-gray-300 disabled:opacity-50"
           >
-            Próxima
+            próxima
           </button>
         </div>
       )}
