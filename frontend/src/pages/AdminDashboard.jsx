@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import AttachmentManager from "../components/ui/AttachmentManager";
 import CreateArticle from "./CreateArticle";
 import ManagePosts from "../components/ui/ManagePosts";
+import EditPostOrder from "../components/ui/EditPostOrder";
 
 
 function AdminDashboard() {
@@ -44,6 +45,12 @@ function AdminDashboard() {
           onClick={() => setSection('manage')}
         >
           gerenciar artigos
+        </button>
+        <button
+          className={`mb-4 px-4 py-2 rounded w-full ${section === 'order' ? 'bg-gray-700' : 'hover:bg-gray-800'}`}
+          onClick={() => setSection('order')}
+        >
+          ordenar posts
         </button>
         <div className="flex-grow"></div>
         <button
@@ -110,6 +117,7 @@ function AdminDashboard() {
         {section === 'attachments' && <AttachmentManager />}
         {section === 'create' && <CreateArticle />}
         {section === 'manage' && <ManagePosts />}
+        {section === 'order' && <EditPostOrder />}
         {/* Adicione mais módulos depois */}
       </main>
 

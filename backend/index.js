@@ -16,6 +16,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Post Order routes
+app.use('/api/post-order', require('./post_orders'));
+
 // User authentication routes
 const userAuthRoutes = require('./user_auth');
 app.use('/api/auth', userAuthRoutes); 
