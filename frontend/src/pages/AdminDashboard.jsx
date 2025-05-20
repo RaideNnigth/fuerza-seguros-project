@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AttachmentManager from "../components/ui/AttachmentManager";
 import CreateArticle from "./CreateArticle";
+import ManagePosts from "../components/ui/ManagePosts";
+
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -36,6 +38,12 @@ function AdminDashboard() {
           onClick={() => setSection('create')}
         >
           criar artigo
+        </button>
+        <button
+          className={`mb-4 px-4 py-2 rounded w-full ${section === 'manage' ? 'bg-gray-700' : 'hover:bg-gray-800'}`}
+          onClick={() => setSection('manage')}
+        >
+          gerenciar artigos
         </button>
         <div className="flex-grow"></div>
         <button
@@ -101,6 +109,7 @@ function AdminDashboard() {
       <main className="flex-1 p-2 md:p-8">
         {section === 'attachments' && <AttachmentManager />}
         {section === 'create' && <CreateArticle />}
+        {section === 'manage' && <ManagePosts />}
         {/* Adicione mais módulos depois */}
       </main>
 

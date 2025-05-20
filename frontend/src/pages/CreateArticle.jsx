@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API_URL from '../config/api';
 
@@ -13,7 +13,7 @@ import EditorToolbar from '../components/ui/EditorToolbar';
 import ImageAttachmentPicker from '../components/ui/ImageAttachmentPicker';
 import './tiptap.css';
 
-export default function CreateArticle() {
+export default function CreateArticle({ existingPost = null, onFinish }) {
   const token = localStorage.getItem('token');
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState('');
@@ -62,15 +62,13 @@ export default function CreateArticle() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!editor) return;
-    if (!cover) {
-      alert('Por favor, selecione uma imagem de capa antes de publicar.');
-      return;
-    }
 
     setLoading(true);
     try {
-      let coverId = null;
-      if (cover) {
+      let coverId = existingPost?.cover || null;
+
+      // Faz upload da nova imagem se tiver uma nova selecionada
+      if (cover instanceof File) {
         const formData = new FormData();
         formData.append('file', cover);
         const uploadRes = await fetch(`${API_URL}/api/attachments`, {
@@ -90,8 +88,13 @@ export default function CreateArticle() {
         author: 'Gustavo',
       };
 
-      const res = await fetch(`${API_URL}/api/blog`, {
-        method: 'POST',
+      const method = existingPost ? 'PUT' : 'POST';
+      const url = existingPost
+        ? `${API_URL}/api/blog/${existingPost._id}`
+        : `${API_URL}/api/blog`;
+
+      const res = await fetch(url, {
+        method,
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -99,9 +102,12 @@ export default function CreateArticle() {
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) throw new Error('Erro ao criar artigo');
-      const created = await res.json();
-      navigate(`/blog/${created._id}`);
+      if (!res.ok) throw new Error('Erro ao salvar artigo');
+
+      const saved = await res.json();
+
+      if (onFinish) onFinish(saved);
+      else navigate(`/blog/${saved._id}`);
     } catch (err) {
       alert('Erro ao salvar: ' + err.message);
     }
@@ -111,6 +117,16 @@ export default function CreateArticle() {
   function handleChooseCover() {
     coverInputRef.current?.click();
   }
+
+  useEffect(() => {
+    if (existingPost) {
+      setTitle(existingPost.title || '');
+      setTags(existingPost.tags?.join(', ') || '');
+      setContent(existingPost.htmlContent || '');
+      editor?.commands.setContent(existingPost.htmlContent || '');
+      setPreview(existingPost.cover ? `${API_URL}/api/attachments/${existingPost.cover}` : null);
+    }
+  }, [existingPost, editor]);
 
   return (
     <div className="max-w-3xl mx-auto p-4">

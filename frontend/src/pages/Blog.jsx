@@ -14,7 +14,10 @@ export default function Blog() {
         const data = await res.json();
 
         const mapped = data
-          .filter(post => !post.tags?.some(tag => tag === 'consorcio')) // ← Aqui filtra
+          .filter(post =>
+            post.active === 'y' &&
+            !post.tags?.some(tag => tag === 'consorcio')
+          )
           .map((post) => ({
             _id: post._id,
             image: post.cover ? `${API_URL}/api/attachments/${post.cover}` : DEFAULT_THUMBNAIL,
@@ -22,8 +25,7 @@ export default function Blog() {
             title: (post.title ? post.title : 'sem título'),
             excerpt: (post.htmlContent
               ? post.htmlContent.replace(/<img[^>]*>/gi, '')
-                                .slice(0, 120)
-                                
+                .slice(0, 120)
               : '') + '...',
             author: post.author || 'Equipe Fuerza',
             date: post.createdAt ? new Date(post.createdAt).toLocaleDateString('pt-BR') : '',

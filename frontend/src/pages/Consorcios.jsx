@@ -14,7 +14,10 @@ export default function Consorcios() {
         const data = await res.json();
 
         const mapped = data
-          .filter(post => post.tags?.some(tag => tag === 'consorcio')) // ← Aqui filtra SÓ consórcios
+                    .filter(post =>
+            post.active === 'y' &&
+            post.tags?.some(tag => tag === 'consorcio')
+          )
           .map((post) => ({
             _id: post._id,
             image: post.cover ? `${API_URL}/api/attachments/${post.cover}` : DEFAULT_THUMBNAIL,
