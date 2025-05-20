@@ -23,7 +23,6 @@ export default function Seguros() {
             excerpt: (post.htmlContent
               ? post.htmlContent.replace(/<img[^>]*>/gi, '')
                                 .slice(0, 120)
-                                
               : '') + '...',
             author: post.author || 'Equipe Fuerza',
             date: post.createdAt ? new Date(post.createdAt).toLocaleDateString('pt-BR') : '',

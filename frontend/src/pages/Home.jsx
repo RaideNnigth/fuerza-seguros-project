@@ -14,7 +14,9 @@ export default function Home() {
       <ConsorcioCarousel />
 
       {/* Sobre nós */}
-      <About />
+      <div className="my-8">
+        <About />
+      </div>
 
       {/* Formulário direto */}
       <div className="bg-gray-100 rounded-xl shadow-lg p-8 flex flex-col justify-center items-center">

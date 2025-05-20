@@ -20,10 +20,19 @@ export default function CreateArticle() {
   const [cover, setCover] = useState(null);
   const [preview, setPreview] = useState(null);
   const [content, setContent] = useState('');
+  const [showHtml, setShowHtml] = useState(false);
   const [loading, setLoading] = useState(false);
   const coverInputRef = useRef();
   const [showImagePicker, setShowImagePicker] = useState(false);
   const navigate = useNavigate();
+
+  const editor = useEditor({
+    extensions: [StarterKit, Image, Link, TextStyle, Color],
+    content: '',
+    onUpdate({ editor }) {
+      setContent(editor.getHTML());
+    },
+  });
 
   function handleCoverChange(e) {
     const file = e.target.files[0];
@@ -34,28 +43,13 @@ export default function CreateArticle() {
       setPreview(null);
     }
   }
+
   function handleRemoveCover() {
     setCover(null);
     setPreview(null);
     if (coverInputRef.current) coverInputRef.current.value = '';
   }
 
-  // O segredo para imagens renderizarem corretamente está AQUI:
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Image,
-      Link,
-      TextStyle,
-      Color,
-    ],
-    content: '',
-    onUpdate({ editor }) {
-      setContent(editor.getHTML());
-    },
-  });
-
-  // Inserir imagem do anexo no editor
   function handleInsertImageFromAttachments(att) {
     if (editor) {
       editor.commands.insertContent(
@@ -100,7 +94,7 @@ export default function CreateArticle() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
       });
@@ -139,57 +133,51 @@ export default function CreateArticle() {
           className="border p-2 rounded"
         />
 
-        {/* Escolher capa */}
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
           <div className="flex flex-col items-center gap-2">
             {preview ? (
-              <img
-                src={preview}
-                alt="Capa"
-                className="w-32 h-32 object-cover rounded-lg border"
-              />
+              <img src={preview} alt="Capa" className="w-32 h-32 object-cover rounded-lg border" />
             ) : (
               <div className="w-32 h-32 flex items-center justify-center rounded-lg border bg-gray-100 text-gray-400 text-xs">
                 Sem capa
               </div>
             )}
-            <button
-              type="button"
-              onClick={handleChooseCover}
-              className="w-full px-3 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
-            >
+            <button type="button" onClick={handleChooseCover} className="w-full px-3 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">
               Escolher capa
             </button>
-            <input
-              type="file"
-              ref={coverInputRef}
-              style={{ display: 'none' }}
-              onChange={handleCoverChange}
-              accept="image/*"
-            />
+            <input type="file" ref={coverInputRef} style={{ display: 'none' }} onChange={handleCoverChange} accept="image/*" />
             <span className="text-xs text-gray-500 break-all">{cover ? cover.name : "Nenhuma imagem selecionada"}</span>
             {cover && (
-              <button
-                type="button"
-                onClick={handleRemoveCover}
-                className="w-full px-3 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300"
-              >
+              <button type="button" onClick={handleRemoveCover} className="w-full px-3 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300">
                 Remover capa
               </button>
             )}
           </div>
         </div>
 
-        {/* Editor com toolbar */}
         <div className="border p-2 rounded bg-white min-h-[200px]">
-          {editor && (
-            <>
-              <EditorToolbar
-                editor={editor}
-                onInsertImageFromAttachments={() => setShowImagePicker(true)}
-              />
-              <EditorContent editor={editor} />
-            </>
+          <div className="flex justify-between items-center mb-2">
+            <EditorToolbar editor={editor} onInsertImageFromAttachments={() => setShowImagePicker(true)} />
+            <button
+              type="button"
+              onClick={() => setShowHtml(!showHtml)}
+              className="px-3 py-1 rounded text-sm bg-gray-200 hover:bg-gray-300"
+            >
+              {showHtml ? '👁 Visualizar' : '</> HTML'}
+            </button>
+          </div>
+
+          {showHtml ? (
+            <textarea
+              className="w-full h-60 p-2 border rounded text-sm font-mono"
+              value={content}
+              onChange={(e) => {
+                setContent(e.target.value);
+                editor.commands.setContent(e.target.value);
+              }}
+            />
+          ) : (
+            <EditorContent editor={editor} />
           )}
         </div>
 
@@ -202,7 +190,6 @@ export default function CreateArticle() {
         </button>
       </form>
 
-      {/* MODAL para escolher imagem dos anexos */}
       <ImageAttachmentPicker
         open={showImagePicker}
         onClose={() => setShowImagePicker(false)}
