@@ -8,5 +8,6 @@ router.get('/', blogPostController.getAllPosts);
 router.get('/:id', blogPostController.getPostById);
 router.delete('/:id', verifyToken, blogPostController.deletePost);
 router.get('/tags/:tag', blogPostController.getPostsByTag);
+router.put('/:id', verifyToken, blogPostController.updatePost);
 
 module.exports = router;

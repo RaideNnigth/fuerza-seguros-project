@@ -23,10 +23,16 @@ const blogPostSchema = new mongoose.Schema({
     lowercase: true,
     trim: true,
   }],
+  active:{
+    type: String,
+    default: "y",
+    lowercase: true,
+    trim: true,
+  },
   cover: {
-  type: mongoose.Schema.Types.ObjectId,
-  ref: 'Attachment',
-  required: false,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Attachment',
+    required: false,
   }
 }, {
   timestamps: true, // opcional: cria createdAt e updatedAt

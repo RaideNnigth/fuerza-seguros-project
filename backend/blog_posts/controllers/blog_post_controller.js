@@ -62,3 +62,33 @@ exports.deletePost = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+// Atualizar um post existente
+exports.updatePost = async (req, res) => {
+  try {
+    const { title, htmlContent, tags, cover, author, active } = req.body;
+
+    const updatedPost = await BlogPost.findByIdAndUpdate(
+      req.params.id,
+      {
+        ...(title && { title }),
+        ...(htmlContent && { htmlContent }),
+        ...(tags && { tags }),
+        ...(cover !== undefined && { cover }),
+        ...(author && { author }),
+        ...(active !== undefined && active !== null && { active: String(active).trim().toLowerCase() }),
+        updatedAt: new Date(),
+      },
+      { new: true }
+    );
+
+    if (!updatedPost) {
+      return res.status(404).json({ message: 'Post não encontrado' });
+    }
+
+    res.status(200).json(updatedPost);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
