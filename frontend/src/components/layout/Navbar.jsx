@@ -9,18 +9,22 @@ export default function Navbar() {
   return (
     <header className="bg-[#00214d] text-white shadow-md">
       <div className="max-w-7xl mx-auto flex justify-between items-center px-4 py-3">
-        <Link to="/" className="text-2xl font-bold">
+      <Link to="/" className="text-2xl font-bold h-auto hover:scale-110 transition-transform duration-300 ease-in-out">
+        <div className="flex items-center gap-2">
           <img
             src={Logo}
             alt="Logo Fuerza Seguros"
-            className="w-32 h-auto hover:scale-110 transition-transform duration-300 ease-in-out"
+            className="w-12 h-auto hover:scale-110 transition-transform duration-300 ease-in-out"
           />
-        </Link>
+          <span className="text-white text-xl font-semibold">FUERZA</span>
+        </div>
+      </Link>
 
         {/* Links visíveis no desktop */}
         <nav className="hidden md:flex gap-6 font-medium">
           <Link to="/" className={linkClass}>home</Link>
           <Link to="/consorcios" className={linkClass}>consórcios</Link>
+          <Link to="/seguros" className={linkClass}>seguros</Link>
           <Link to="/blog" className={linkClass}>blog</Link>
         </nav>
 

@@ -7,6 +7,7 @@ import ArticleView from './components/ui/ArticleView';
 
 import Home from './pages/Home';
 import Consorcios from './pages/Consorcios';
+import Seguros from './pages/Seguros'
 import Blog from './pages/Blog';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashBoard from './pages/AdminDashboard';
@@ -24,6 +25,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} /> 
           <Route path="/consorcios" element={<Consorcios />} />
+          <Route path="/seguros" element={<Seguros />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<ArticleView />} />
           <Route path="/admin/login" element={<AdminLogin />} />
