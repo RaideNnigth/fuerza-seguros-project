@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import API_URL from '../../config/api'; // ou ajuste o caminho conforme sua organização
+import API_URL from '../../config/api';
 
 import Carousel from './Carousel';
 import RelatedPosts from './RelatedPosts';
-import ContactForm from './ContactForm';
+import ConsorcioForm from './ConsorcioForm';
 
 export default function ArticleView() {
   const { slug } = useParams();
@@ -18,16 +18,15 @@ export default function ArticleView() {
         const data = await res.json();
 
         setArticle({
-          _id : data._id,
+          _id: data._id,
           title: data.title,
           html: data.htmlContent,
           category: data.tags?.[0] || 'Blog',
           date: new Date(data.createdAt).toLocaleDateString('pt-BR'),
           author: data.author || 'Equipe Fuerza',
-          headings: [], // se quiser extrair do HTML, precisa parsear
-          images: [],   // idem
+          headings: [],
+          images: [],
         });
-
         setLoading(false);
       } catch (err) {
         console.error('Erro ao buscar artigo:', err);
@@ -47,15 +46,32 @@ export default function ArticleView() {
     return (
       <div className="max-w-2xl mx-auto p-10 text-center">
         <h1 className="text-2xl font-bold mb-4">Artigo não encontrado</h1>
-        <p className="text-gray-600">Verifique a URL ou retorne ao <a className="text-blue-500 underline" href="/blog">blog</a>.</p>
+        <p className="text-gray-600">
+          Verifique a URL ou retorne ao <a className="text-blue-500 underline" href="/blog">blog</a>.
+        </p>
       </div>
     );
   }
 
   return (
-    <article className="max-w-4xl mx-auto px-4 py-10">
-      <h1 style={{ fontFamily: '"Times New Roman", Times, serif' }} className="text-3xl font-bold mb-4">{article.title}</h1>
-      <p style={{ fontFamily: '"Times New Roman", Times, serif' }} className="text-sm text-gray-500 mb-6">Por {article.author} em {article.date}</p>
+    <article className="
+      max-w-3xl w-full 
+      bg-white rounded-2xl shadow-xl 
+      p-6 md:p-10 my-10 
+      mx-auto
+    ">
+      <header className="mb-6">
+        <h1 className="text-4xl font-serif font-bold mb-2 text-center text-gray-900">
+          {article.title}
+        </h1>
+        <div className="text-center text-sm text-gray-600">
+          <span className="italic">Por {article.author}</span>
+          <span className="mx-2">•</span>
+          <span>{article.date}</span>
+          <span className="mx-2">•</span>
+          <span className="uppercase font-semibold tracking-widest text-blue-700">{article.category}</span>
+        </div>
+      </header>
 
       {article.headings.length > 0 && (
         <nav className="mb-8 bg-gray-100 p-4 rounded-lg">
@@ -70,15 +86,25 @@ export default function ArticleView() {
 
       {article.images.length > 0 && <Carousel images={article.images} />}
 
-      <div
-        className="prose prose-blue max-w-none"
-        style={{ fontFamily: '"Times New Roman", Times, serif' }}
-        dangerouslySetInnerHTML={{ __html: article.html }}
-      />
+      <section
+        className="prose prose-lg max-w-none prose-blue"
+        style={{
+          fontFamily: '"Times New Roman", Times, serif',
+          textAlign: 'justify',
+          lineHeight: '1.7',
+          letterSpacing: '0.03em',
+          fontSize: '1.16rem',
+          marginBottom: '3rem',
+        }}
+      >
+        <div
+          className="article-html"
+          dangerouslySetInnerHTML={{ __html: article.html }}
+        />
+      </section>
 
       <RelatedPosts category={article.category} currentId={article._id} />
-
-      <ContactForm />
+      <ConsorcioForm />
     </article>
   );
 }
