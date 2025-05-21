@@ -50,3 +50,4 @@ data/
 
 # Miscellaneous
 *.pem
+mongod.log.*
