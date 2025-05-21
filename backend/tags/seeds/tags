@@ -1,0 +1,50 @@
+const mongoose = require('mongoose');
+const Tag = require('../tags/models/Tag');
+
+async function seedTags() {
+    await mongoose.connect('mongodb://localhost:27017/seubanco');
+    const defaultTags = [
+    'seguro',
+    'consórcio',
+    'automóvel',
+    'residencial',
+    'empresarial',
+    'vida',
+    'prestamista',
+    'viagem',
+    'frota',
+    'equipamentos',
+    'patrimônio',
+    'cartão de crédito',
+    'capitalização',
+    'imóvel',
+    'consórcio de automóvel',
+    'consórcio de imóvel',
+    'consórcio de serviços',
+    'plano de saúde',
+    'odontológico',
+    'acidentes pessoais',
+    'rcf-v', // responsabilidade civil facultativa de veículos
+    'rcf',
+    'assistência 24h',
+    'proteção financeira',
+    'sinistro',
+    'vistoria',
+    'apólice',
+    'simulação',
+    'cobertura',
+    'franquia',
+    'indenização',
+    'benefício',
+    'adesão',
+    'parcelamento'
+    ];
+
+    for (let tagName of defaultTags) {
+        await Tag.updateOne({ name: tagName }, { name: tagName }, { upsert: true });
+    }
+    console.log('Tags padrão garantidas!');
+    mongoose.disconnect();
+}
+
+seedTags();
