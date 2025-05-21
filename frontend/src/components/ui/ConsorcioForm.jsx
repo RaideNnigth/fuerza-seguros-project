@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import API_URL from '../../config/api';
 
 export default function ConsorcioForm() {
   const [step, setStep] = useState(0);
@@ -10,15 +11,68 @@ export default function ConsorcioForm() {
     email: '',
     horarioContato: '',
   });
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState('');
+  const [erro, setErro] = useState('');
 
   const nextStep = () => setStep(step + 1);
   const prevStep = () => step > 0 && setStep(step - 1);
 
   const handleChange = (field) => (e) => setForm({ ...form, [field]: e.target.value });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(form);
+  const handleSubmit = async (e) => {
+    if (e) e.preventDefault();
+    setLoading(true);
+    setSuccess('');
+    setErro('');
+
+    try {
+      const res = await fetch(`${API_URL}/api/email/send`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          subject: `Lead Consórcio - ${form.tipoConsorcio} - ${form.nome}`,
+          text:
+            `Tipo: ${form.tipoConsorcio}\n` +
+            `Valor: ${form.valorInvestimento}\n` +
+            `Nome: ${form.nome}\n` +
+            `Telefone: ${form.telefone}\n` +
+            `E-mail: ${form.email}\n` +
+            `Horário de contato: ${form.horarioContato}`,
+          html: `
+            <h3>Novo lead de consórcio</h3>
+            <ul>
+              <li><b>Tipo:</b> ${form.tipoConsorcio}</li>
+              <li><b>Valor:</b> ${form.valorInvestimento}</li>
+              <li><b>Nome:</b> ${form.nome}</li>
+              <li><b>Telefone:</b> ${form.telefone}</li>
+              <li><b>Email:</b> ${form.email}</li>
+              <li><b>Horário de contato:</b> ${form.horarioContato}</li>
+            </ul>
+          `
+        }),
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        setSuccess('Mensagem enviada com sucesso! ✔');
+        setForm({
+          tipoConsorcio: '',
+          valorInvestimento: '',
+          nome: '',
+          telefone: '',
+          email: '',
+          horarioContato: '',
+        });
+        setStep(0); // ou mantenha na etapa final, como preferir
+      } else {
+        setErro(data.message || 'Erro ao enviar, tente novamente.');
+      }
+    } catch (err) {
+      setErro('Erro ao conectar com o servidor.', err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const steps = [
@@ -113,17 +167,18 @@ export default function ConsorcioForm() {
       <button
         className="mt-4 block mx-auto bg-blue-900 text-white px-6 py-2 rounded shadow-md"
         onClick={handleSubmit}
+        disabled={loading}
       >
-        Enviar
+        {loading ? 'Enviando...' : 'Enviar'}
       </button>
+      {success && <div className="text-green-600 mt-4">{success}</div>}
+      {erro && <div className="text-red-600 mt-4">{erro}</div>}
     </div>,
   ];
 
   return (
     <div className="w-full max-w-lg mx-auto bg-white shadow-lg rounded-lg p-6 sm:p-8 my-10 overflow-x-hidden">
-
       {steps[step]}
-
       {step > 0 && (
         <button className="mt-4 text-sm underline text-gray-500" onClick={prevStep}>
           Voltar

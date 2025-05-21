@@ -8,6 +8,7 @@ backend/.env
     EMAIL_USER=#Seu Email
     EMAIL_PASS=#App Pass
     EMAIL_SERVICE=gmail
+    EMAIL_FOR_LEAD=#email para onde mandar o lead
 
 frontend/.env
     VITE_API_URL=https://localhost:3000
