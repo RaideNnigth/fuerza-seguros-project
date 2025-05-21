@@ -35,6 +35,10 @@ app.use('/api/attachments', attachmentRoutes);
 const emailRoutes = require('./emails');
 app.use('/api/email', emailRoutes);
 
+// Tags routes
+const tagRoutes = require('./tags');
+app.use('/api/tags', tagRoutes);
+
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error(err));

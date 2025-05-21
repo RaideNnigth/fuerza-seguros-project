@@ -1,0 +1,26 @@
+const Tag = require('../models/Tag');
+
+// Criar uma nova tag
+exports.createTag = async (req, res) => {
+  try {
+    const { name } = req.body;
+    if (!name) return res.status(400).json({ message: 'Nome obrigatório' });
+
+    const tag = new Tag({ name });
+    await tag.save();
+    res.status(201).json(tag);
+  } catch (err) {
+    if (err.code === 11000) return res.status(409).json({ message: 'Tag já existe' });
+    res.status(500).json({ message: 'Erro ao criar tag', error: err.message });
+  }
+};
+
+// Listar todas as tags
+exports.getTags = async (req, res) => {
+  try {
+    const tags = await Tag.find().sort({ name: 1 }); // ordena por nome
+    res.json(tags);
+  } catch (err) {
+    res.status(500).json({ message: 'Erro ao listar tags', error: err.message });
+  }
+};

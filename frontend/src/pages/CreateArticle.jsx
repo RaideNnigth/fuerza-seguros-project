@@ -11,12 +11,13 @@ import Image from '@tiptap/extension-image';
 
 import EditorToolbar from '../components/ui/EditorToolbar';
 import ImageAttachmentPicker from '../components/ui/ImageAttachmentPicker';
+import TagSelector from '../components/ui/TagSelector'; // <-- Aqui!
 import './tiptap.css';
 
 export default function CreateArticle({ existingPost = null, onFinish }) {
   const token = localStorage.getItem('token');
   const [title, setTitle] = useState('');
-  const [tags, setTags] = useState('');
+  const [selectedTags, setSelectedTags] = useState([]);
   const [cover, setCover] = useState(null);
   const [preview, setPreview] = useState(null);
   const [content, setContent] = useState('');
@@ -82,7 +83,7 @@ export default function CreateArticle({ existingPost = null, onFinish }) {
 
       const payload = {
         title,
-        tags: tags.split(',').map(tag => tag.trim()).filter(Boolean),
+        tags: selectedTags,
         htmlContent: content,
         cover: coverId,
         author: 'Gustavo',
@@ -121,7 +122,7 @@ export default function CreateArticle({ existingPost = null, onFinish }) {
   useEffect(() => {
     if (existingPost) {
       setTitle(existingPost.title || '');
-      setTags(existingPost.tags?.join(', ') || '');
+      setSelectedTags(existingPost.tags || []);
       setContent(existingPost.htmlContent || '');
       editor?.commands.setContent(existingPost.htmlContent || '');
       setPreview(existingPost.cover ? `${API_URL}/api/attachments/${existingPost.cover}` : null);
@@ -129,55 +130,57 @@ export default function CreateArticle({ existingPost = null, onFinish }) {
   }, [existingPost, editor]);
 
   return (
-    <div className="max-w-3xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Criar Novo Artigo</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-6 bg-white rounded-lg shadow p-6">
+    <div className="max-w-3xl mx-auto py-10 px-2 md:px-0">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-8 bg-white rounded-2xl shadow-2xl p-8 border border-blue-50">
+        <h1 className="text-3xl font-extrabold text-blue-800 mb-2 tracking-tight">Criar Novo Artigo</h1>
+
+        {/* Título */}
         <input
           type="text"
-          placeholder="Título"
+          placeholder="Título do artigo"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
-          className="border p-2 rounded"
+          className="border border-gray-200 focus:border-blue-600 focus:ring-1 focus:ring-blue-300 p-3 rounded-xl font-semibold text-xl transition"
         />
 
-        <input
-          type="text"
-          placeholder="Tags (separadas por vírgula)"
-          value={tags}
-          onChange={(e) => setTags(e.target.value)}
-          className="border p-2 rounded"
-        />
+        {/* Tags */}
+        <div>
+          <label className="block text-sm font-bold mb-1">Tags</label>
+          <TagSelector selected={selectedTags} onChange={setSelectedTags} />
+        </div>
 
-        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-          <div className="flex flex-col items-center gap-2">
+        {/* Capa */}
+        <div className="flex flex-col sm:flex-row gap-8 items-start sm:items-center">
+          <div className="flex flex-col items-center gap-3">
             {preview ? (
-              <img src={preview} alt="Capa" className="w-32 h-32 object-cover rounded-lg border" />
+              <img src={preview} alt="Capa" className="w-32 h-32 object-cover rounded-xl border-2 border-blue-200 shadow-sm" />
             ) : (
-              <div className="w-32 h-32 flex items-center justify-center rounded-lg border bg-gray-100 text-gray-400 text-xs">
+              <div className="w-32 h-32 flex items-center justify-center rounded-xl border-2 border-gray-200 bg-gray-100 text-gray-400 text-xs">
                 Sem capa
               </div>
             )}
-            <button type="button" onClick={handleChooseCover} className="w-full px-3 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">
+            <button type="button" onClick={handleChooseCover} className="w-full px-4 py-2 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">
               Escolher capa
             </button>
             <input type="file" ref={coverInputRef} style={{ display: 'none' }} onChange={handleCoverChange} accept="image/*" />
             <span className="text-xs text-gray-500 break-all">{cover ? cover.name : "Nenhuma imagem selecionada"}</span>
             {cover && (
-              <button type="button" onClick={handleRemoveCover} className="w-full px-3 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300">
+              <button type="button" onClick={handleRemoveCover} className="w-full px-4 py-2 rounded-xl bg-gray-200 text-gray-700 hover:bg-gray-300 transition">
                 Remover capa
               </button>
             )}
           </div>
         </div>
 
-        <div className="border p-2 rounded bg-white min-h-[200px]">
+        {/* Editor */}
+        <div className="border-2 border-blue-100 rounded-2xl bg-white min-h-[250px] p-2 shadow-inner">
           <div className="flex justify-between items-center mb-2">
             <EditorToolbar editor={editor} onInsertImageFromAttachments={() => setShowImagePicker(true)} />
             <button
               type="button"
               onClick={() => setShowHtml(!showHtml)}
-              className="px-3 py-1 rounded text-sm bg-gray-200 hover:bg-gray-300"
+              className="px-3 py-1 rounded text-sm bg-gray-100 hover:bg-blue-100 border border-gray-200 font-mono"
             >
               {showHtml ? '👁 Visualizar' : '</> HTML'}
             </button>
@@ -185,7 +188,7 @@ export default function CreateArticle({ existingPost = null, onFinish }) {
 
           {showHtml ? (
             <textarea
-              className="w-full h-60 p-2 border rounded text-sm font-mono"
+              className="w-full h-60 p-2 border rounded-xl text-sm font-mono"
               value={content}
               onChange={(e) => {
                 setContent(e.target.value);
@@ -197,10 +200,11 @@ export default function CreateArticle({ existingPost = null, onFinish }) {
           )}
         </div>
 
+        {/* Botão Publicar */}
         <button
           type="submit"
           disabled={loading}
-          className="w-full px-4 py-2 rounded font-semibold transition bg-green-600 text-white hover:bg-green-700 disabled:opacity-50"
+          className="w-full py-3 rounded-xl font-semibold transition bg-gradient-to-r from-blue-700 to-orange-400 text-white hover:from-blue-800 hover:to-orange-500 disabled:opacity-60 shadow-lg text-lg"
         >
           {loading ? 'Publicando...' : 'Publicar'}
         </button>
