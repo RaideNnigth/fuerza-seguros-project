@@ -1,4 +1,5 @@
 const BlogPost = require('../models/BlogPost');
+const PostOrder = require('../../post_orders/models/PostOrder');
 
 // Criar novo post
 exports.createPost = async (req, res) => {
@@ -13,7 +14,28 @@ exports.createPost = async (req, res) => {
       cover: cover || null
     });
 
-    await newPost.save();
+    const savedPost = await newPost.save();
+
+    // 🔁 Para cada tag, adiciona ao final da ordem
+    if (Array.isArray(tags)) {
+      for (const tag of tags) {
+        const tagLower = tag.toLowerCase();
+        const existing = await PostOrder.findOne({ tag: tagLower });
+
+        if (existing) {
+          if (!existing.orderedPostIds.includes(savedPost._id)) {
+            existing.orderedPostIds.push(savedPost._id);
+            await existing.save();
+          }
+        } else {
+          await PostOrder.create({
+            tag: tagLower,
+            orderedPostIds: [savedPost._id]
+          });
+        }
+      }
+    }
+
     res.status(201).json(newPost);
   } catch (error) {
     res.status(400).json({ message: error.message });
