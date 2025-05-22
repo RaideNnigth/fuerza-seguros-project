@@ -10,7 +10,7 @@ export default function BlogCard({ post }) {
           className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
         />
         <div style={{ fontFamily: '"Times New Roman", Times, serif' }} className="p-4 flex flex-col gap-2">
-          <span style={{ fontFamily: '"Times New Roman", Times, serif' }} className="text-xs text-blue-500 uppercase tracking-wide">{post.category}</span>
+          <span style={{ fontFamily: '"Times New Roman", Times, serif' }} className="text-xs text-blue-500 uppercase tracking-wide">{post.category?.toLowerCase() !== 'home page' ? post.category : ''}</span>
           <h2 style={{ fontFamily: '"Times New Roman", Times, serif' }} className="text-lg font-semibold text-gray-800 hover:text-blue-600 transition-colors duration-300">
             {post.title}
           </h2>
