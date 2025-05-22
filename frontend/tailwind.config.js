@@ -20,6 +20,15 @@ export default {
         DEFAULT: '2px 2px 4px rgba(0,0,0,0.8)',
         lg: '3px 3px 6px rgba(0,0,0,0.9)',
       },
+      animation: {
+        scroll: 'scroll 30s linear infinite',
+      },
+      keyframes: {
+        scroll: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+      },
     },
   },
   plugins: [lineClamp, textShadow],

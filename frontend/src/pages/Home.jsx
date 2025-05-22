@@ -1,8 +1,8 @@
 import HeroSection from '../components/ui/HeroSection';
 import ConsorcioForm from '../components/ui/ConsorcioForm';
 import ConsorcioCarousel from '../components/ui/ConsorcioCarousel';
-import About from '../components/ui/About'
-
+import About from '../components/ui/About';
+import SeguradorasStrip from '../components/ui/SeguradorasStrip';
 
 export default function Home() {
   return (
@@ -12,6 +12,9 @@ export default function Home() {
 
       {/* Carousel que controla os concorcios */}
       <ConsorcioCarousel />
+
+      {/* Banda de logos animada */}
+      <SeguradorasStrip />
 
       {/* Sobre nós */}
       <div className="my-8">

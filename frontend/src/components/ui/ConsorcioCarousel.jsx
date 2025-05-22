@@ -6,7 +6,6 @@ import API_URL from '../../config/api';
 
 import DEFAULT_THUMBNAIL from '../../assets/images/default-thumbnail.png'
 
-
 export default function ConsorcioCarousel() {
   const [consorcios, setConsorcios] = useState([]);
 
