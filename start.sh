@@ -36,8 +36,8 @@ shutdown_all() {
 }
 
 # Fecha possíveis processos nas portas padrão
-echo "🔧 Encerrando processos nas portas 3000 e 5173 (se houver)..."
-fuser -k 3000/tcp 5173/tcp 2>/dev/null
+echo "🔧 Encerrando processos nas portas 3000 e 5174 (se houver)..."
+fuser -k 3000/tcp 5174/tcp 2>/dev/null
 
 # Iniciar MongoDB (se ainda não estiver rodando)
 if ! pgrep -f "mongod" > /dev/null; then

@@ -12,3 +12,7 @@ backend/.env
 
 frontend/.env
     VITE_API_URL=https://localhost:3000
+
+LINKS para local:
+Acesso ao frontEnd por HTTPS:
+https://localhost:5174/

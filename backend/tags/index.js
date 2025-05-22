@@ -39,7 +39,8 @@ const Tag = require('./models/Tag');
     'indenização',
     'benefício',
     'adesão',
-    'parcelamento'
+    'parcelamento',
+    'home page'
   ];
   for (let tagName of defaultTags) {
     await Tag.updateOne(
@@ -48,7 +49,6 @@ const Tag = require('./models/Tag');
       { upsert: true }
     );
   }
-  console.log('[TAGS] Tags padrão garantidas!');
 })();
 
 // SUAS ROTAS
