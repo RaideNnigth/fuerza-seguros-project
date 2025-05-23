@@ -16,7 +16,7 @@ export default function Consorcios() {
         const mapped = data
                     .filter(post =>
             post.active === 'y' &&
-            post.tags?.some(tag => tag === 'consorcio')
+            post.tags?.some(tag => tag === 'consórcio')
           )
           .map((post) => ({
             _id: post._id,
