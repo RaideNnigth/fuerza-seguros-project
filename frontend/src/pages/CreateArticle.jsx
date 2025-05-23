@@ -17,6 +17,7 @@ import './tiptap.css';
 export default function CreateArticle({ existingPost = null, onFinish }) {
   const token = localStorage.getItem('token');
   const [title, setTitle] = useState('');
+  const [author, setAuthor] = useState('');
   const [selectedTags, setSelectedTags] = useState([]);
   const [cover, setCover] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -83,10 +84,10 @@ export default function CreateArticle({ existingPost = null, onFinish }) {
 
       const payload = {
         title,
+        author, // <-- Agora vindo do input
         tags: selectedTags,
         htmlContent: content,
         cover: coverId,
-        author: 'Gustavo',
       };
 
       const method = existingPost ? 'PUT' : 'POST';
@@ -122,6 +123,7 @@ export default function CreateArticle({ existingPost = null, onFinish }) {
   useEffect(() => {
     if (existingPost) {
       setTitle(existingPost.title || '');
+      setAuthor(existingPost.author || '');
       setSelectedTags(existingPost.tags || []);
       setContent(existingPost.htmlContent || '');
       editor?.commands.setContent(existingPost.htmlContent || '');
@@ -141,6 +143,15 @@ export default function CreateArticle({ existingPost = null, onFinish }) {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
+          className="border border-gray-200 focus:border-blue-600 focus:ring-1 focus:ring-blue-300 p-3 rounded-xl font-semibold text-xl transition"
+        />
+
+        {/* Autor */}
+        <input
+          type="text"
+          placeholder="Nome do autor"
+          value={author}
+          onChange={(e) => setAuthor(e.target.value)}
           className="border border-gray-200 focus:border-blue-600 focus:ring-1 focus:ring-blue-300 p-3 rounded-xl font-semibold text-xl transition"
         />
 
