@@ -16,7 +16,7 @@ export default function Seguros() {
         const mapped = data
           .filter(post =>
             post.active === 'y' &&
-            post.tags?.some(tag => tag === 'seguros')
+            post.tags?.some(tag => tag === 'seguro')
           )
           .map((post) => ({
             _id: post._id,
