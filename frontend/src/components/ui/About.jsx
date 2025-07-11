@@ -8,9 +8,11 @@ export default function About() {
         <div className="w-full bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition duration-500 ease-in-out">
           <h2 className="text-3xl font-bold mb-4 text-fuerza-azul">Nossa História</h2>
           <p className="text-gray-700 leading-relaxed text-lg">
-            A Fuerza nasceu com o propósito de oferecer proteção personalizada e humana.
-            Ao longo dos anos, nos consolidamos como referência em seguros empresariais,
-            seguros pessoais e consórcios acessíveis.
+            A Fuerza oferece serviços de consultoria especializada nos mais diversos ramos de <b>Seguros, Consórcios e Previdência Privada.</b>
+            <br></br>
+            <br></br>
+            Oferecemos aos nossos clientes todo o suporte necessário, desde a escolha das opções mais adequadas para o seu segmento, 
+            até a contratação com o melhor custo-benefício, sempre priorizando a ética e a transparência nas relações.
           </p>
         </div>
         {/* Imagem */}

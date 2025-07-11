@@ -114,7 +114,11 @@ export default function ConsorcioForm() {
   const steps = [
     <div key="step0" className="text-center flex flex-col items-center">
       <h2 className="text-2xl font-bold text-blue-900 mb-3">Simule seu consórcio</h2>
-      <p className="mb-6 text-gray-700">Com a Fuerza é rapidinho. Preencha as etapas para receber atendimento personalizado.</p>
+      <p className="mb-6 text-gray-700">
+        Com a Fuerza seu orçamento é rápido. 
+        <br />
+        Preencha os campos e receba um atendimento personalizado.
+      </p>
       <button
         className="bg-blue-900 text-white px-10 py-3 rounded-lg shadow-md text-lg font-semibold transition hover:bg-blue-800"
         onClick={nextStep}

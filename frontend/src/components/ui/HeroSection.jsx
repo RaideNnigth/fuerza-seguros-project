@@ -1,4 +1,4 @@
-import banner_img from '../../assets/images/handshake-homepage.jpg'
+import banner_img from '../../assets/images/fuerza/FamiliaSofa4por3-1080x1080.png';
 
 export default function HeroSection() {
   return (
@@ -17,7 +17,7 @@ export default function HeroSection() {
         {/* Conteúdo do texto */}
         <div className="text-center md:text-left flex flex-col justify-center h-full">
           <h1 className="text-4xl md:text-5xl font-bold leading-tight">
-            protegendo o seu presente<br /> e o seu futuro
+            Investindo no futuro <br /> cuidando do seu presente.
           </h1>
           <p className="mt-6 text-lg text-white/90 max-w-md md:max-w-lg">
             soluções inteligentes em seguros e consórcios sob medida para empresas e pessoas em todo o brasil.
