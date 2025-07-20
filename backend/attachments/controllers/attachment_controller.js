@@ -47,7 +47,8 @@ exports.getAttachmentsPaginated = async (req, res) => {
       results: response
     });
   } catch (err) {
-    res.status(500).json({ message: 'Erro ao buscar anexos paginados' });
+  console.error('Erro ao buscar anexos paginados:', err);
+  res.status(500).json({ message: 'Erro ao buscar anexos paginados', error: err.message });
   }
 };
 
