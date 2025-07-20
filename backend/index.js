@@ -10,15 +10,22 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
-// Middlewares
+// Allowed origins for CORS
 const allowedOrigins = [
   'https://fuerza-seguros-project-1rfq2xorq-raidennigths-projects.vercel.app',
+  'https://fuerza-seguros-project-git-master-raidennigths-projects.vercel.app',
+  'http://localhost:5173',
 ];
 
 app.use(cors({
-  origin: '*', // Allow all origins for development
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true,
 }));
-
 app.use(express.json());
 
 // Routes
