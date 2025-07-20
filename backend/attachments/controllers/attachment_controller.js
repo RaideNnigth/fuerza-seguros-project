@@ -24,28 +24,31 @@ exports.getAttachmentsPaginated = async (req, res) => {
     const pageSize = 10;
     const skip = pageIndex * pageSize;
 
-    const total = await Attachment.countDocuments();
+    const total = await Attachment.countDocuments({ data: { $exists: true, $ne: null } });
 
-    const attachments = await Attachment.find({ data: { $exists: true, $ne: null } })
-      .sort({ uploadedAt: -1 })
-      .skip(skip)
-      .limit(pageSize)
-      .allowDiskUse(true);
-
-    const response = attachments.map(a => {
-      let base64 = null;
-      if (a.data && Buffer.isBuffer(a.data)) {
-        base64 = `data:${a.mimetype};base64,${a.data.toString('base64')}`;
+    const attachments = await Attachment.aggregate([
+      { $match: { data: { $exists: true, $ne: null } } },
+      { $sort: { uploadedAt: -1 } },
+      { $skip: skip },
+      { $limit: pageSize },
+      {
+        $project: {
+          _id: 1,
+          filename: 1,
+          mimetype: 1,
+          uploadedAt: 1,
+          data: 1
+        }
       }
+    ]).allowDiskUse(true); // ← ESSENCIAL AQUI
 
-      return {
-        _id: a._id,
-        filename: a.filename,
-        mimetype: a.mimetype,
-        uploadedAt: a.uploadedAt,
-        base64
-      };
-    });
+    const response = attachments.map(a => ({
+      _id: a._id,
+      filename: a.filename,
+      mimetype: a.mimetype,
+      uploadedAt: a.uploadedAt,
+      base64: a.data ? `data:${a.mimetype};base64,${a.data.toString('base64')}` : null
+    }));
 
     res.json({
       page: pageIndex,
@@ -62,8 +65,6 @@ exports.getAttachmentsPaginated = async (req, res) => {
     });
   }
 };
-
-
 
 exports.getAttachmentByFilename = async (req, res) => {
   try {
