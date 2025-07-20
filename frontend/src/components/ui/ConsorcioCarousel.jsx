@@ -38,14 +38,18 @@ export default function ConsorcioCarousel() {
           .filter(
             p =>
               p &&
+              p.active === 'y' &&  
               Array.isArray(p.tags) &&
               p.tags.map(t => t.toLowerCase()).includes(tag)
           );
 
         // 5. Caso não haja ordem salva, usar todos os posts com a tag
         const fallback = postsData.filter(
-          p => Array.isArray(p.tags) && p.tags.map(t => t.toLowerCase()).includes(tag)
-        );
+            p =>
+            p.active === 'y' && // <-- Aqui também
+            Array.isArray(p.tags) &&
+            p.tags.map(t => t.toLowerCase()).includes(tag)
+          );
 
         const finalList = ordered.length > 0 ? ordered : fallback;
 
@@ -54,7 +58,7 @@ export default function ConsorcioCarousel() {
           image: post.cover ? `${API_URL}/api/attachments/${post.cover}` : DEFAULT_THUMBNAIL,
           category: post.tags && post.tags[0] ? post.tags[0].toLowerCase() : 'blog',
           title: post.title || 'sem título',
-          excerpt: post.htmlContent ? post.htmlContent.slice(0, 120) + '...' : '',
+          excerpt: post.htmlContent ? post.htmlContent.replace(/<[^>]+>/g, '').slice(0, 120) + '...' : '',
           author: post.author || 'Equipe Fuerza',
           date: post.createdAt ? new Date(post.createdAt).toLocaleDateString('pt-BR') : '',
         }));

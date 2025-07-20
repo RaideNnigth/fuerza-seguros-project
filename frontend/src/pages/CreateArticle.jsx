@@ -11,7 +11,7 @@ import Image from '@tiptap/extension-image';
 
 import EditorToolbar from '../components/ui/EditorToolbar';
 import ImageAttachmentPicker from '../components/ui/ImageAttachmentPicker';
-import TagSelector from '../components/ui/TagSelector'; // <-- Aqui!
+import TagSelector from '../components/ui/TagSelector'; 
 import './tiptap.css';
 
 export default function CreateArticle({ existingPost = null, onFinish }) {
