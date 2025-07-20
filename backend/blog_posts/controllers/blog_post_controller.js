@@ -124,6 +124,29 @@ exports.updatePost = async (req, res) => {
       );
     }
 
+    // Verifica quais tags foram adicionadas
+    const addedTags = (updatedPost.tags || []).filter(
+      tag => !(previousPost.tags || []).includes(tag)
+    );
+
+    // Adiciona o ID do post na ordem de cada tag adicionada
+    for (const tag of addedTags) {
+      const tagLower = tag.toLowerCase();
+      const existing = await PostOrder.findOne({ tag: tagLower });
+      if (existing) {
+        if (!existing.orderedPostIds.includes(updatedPost._id)) {
+          existing.orderedPostIds.push(updatedPost._id);
+          await existing.save();
+        }
+      } else {
+        await PostOrder.create({
+          tag: tagLower,
+          orderedPostIds: [updatedPost._id]
+        });
+      }
+    }
+
+    // Retorna o post atualizado
     res.status(200).json(updatedPost);
   } catch (error) {
     res.status(400).json({ message: error.message });
