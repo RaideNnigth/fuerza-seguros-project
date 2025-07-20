@@ -11,7 +11,15 @@ const PORT = process.env.PORT || 3000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
 // Middlewares
-app.use(cors());
+const allowedOrigins = [
+  'https://fuerza-seguros-project-1rfq2xorq-raidennigths-projects.vercel.app',
+];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true,
+}));
+
 app.use(express.json());
 
 // Routes
