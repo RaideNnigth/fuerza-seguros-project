@@ -90,6 +90,13 @@ exports.updatePost = async (req, res) => {
   try {
     const { title, htmlContent, tags, cover, author, active } = req.body;
 
+    // Buscar o post original antes da atualização
+    const previousPost = await BlogPost.findById(req.params.id);
+    if (!previousPost) {
+      return res.status(404).json({ message: 'Post não encontrado' });
+    }
+
+    // Atualizar o post
     const updatedPost = await BlogPost.findByIdAndUpdate(
       req.params.id,
       {
@@ -104,8 +111,17 @@ exports.updatePost = async (req, res) => {
       { new: true }
     );
 
-    if (!updatedPost) {
-      return res.status(404).json({ message: 'Post não encontrado' });
+    // Verifica quais tags foram removidas
+    const removedTags = (previousPost.tags || []).filter(
+      tag => !(updatedPost.tags || []).includes(tag)
+    );
+
+    // Remove o ID do post da ordem de cada tag removida
+    for (const tag of removedTags) {
+      await PostOrder.findOneAndUpdate(
+        { tag: tag.toLowerCase() },
+        { $pull: { orderedPostIds: updatedPost._id } }
+      );
     }
 
     res.status(200).json(updatedPost);

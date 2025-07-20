@@ -13,15 +13,18 @@ export default function Blog() {
         const res = await fetch(`${API_URL}/api/blog`);
         const data = await res.json();
 
-        const mapped = data.map((post) => ({
-        _id: post._id,
-        image: post.cover ? `${API_URL}/api/attachments/${post.cover}`: DEFAULT_THUMBNAIL,
-        category: (post.tags && post.tags[0] ? post.tags[0].toLowerCase() : 'blog'),
-        title: (post.title ? post.title.toLowerCase() : 'sem título'),
-        excerpt: (post.htmlContent ? post.htmlContent.slice(0, 120).toLowerCase() : '') + '...',
-        author: post.author || 'Equipe Fuerza',
-        date: post.createdAt ? new Date(post.createdAt).toLocaleDateString('pt-BR') : '',
-      }));
+      const mapped = data.filter(post =>
+            post.active === 'y' 
+      )
+      .map(post => ({
+          ...post,
+          image: post.cover ? `${API_URL}/api/attachments/${post.cover}` : DEFAULT_THUMBNAIL,
+          category: post.tags && post.tags[0] ? post.tags[0].toLowerCase() : 'blog',
+          title: post.title || 'sem título',
+          excerpt: post.htmlContent ? post.htmlContent.replace(/<[^>]+>/g, '').slice(0, 120) + '...' : '',
+          author: post.author || 'Equipe Fuerza',
+          date: post.createdAt ? new Date(post.createdAt).toLocaleDateString('pt-BR') : '',
+        }));
         setPosts(mapped);
       } catch (err) {
         console.error('Erro ao buscar posts:', err);
