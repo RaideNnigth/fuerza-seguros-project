@@ -17,7 +17,6 @@ const allowedOrigins = [
   'https://fuerza-seguros-project-git-master-raidennigths-projects.vercel.app',
   'http://localhost:5173',
 ];
-https://fuerza-seguros-project.up.railway.app/api/blog
 
 app.use(cors({
   origin: function (origin, callback) {
