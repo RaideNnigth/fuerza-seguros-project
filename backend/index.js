@@ -1,64 +1,82 @@
 require('dotenv').config();
 
+// backend/index.js
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const https = require('https');
 const fs = require('fs');
 
-const app = express();
-const PORT = process.env.PORT || 3000;
-const NODE_ENV = process.env.NODE_ENV || 'development';
+const sslOptions = {
+  key: fs.readFileSync('./cert/key.pem'),
+  cert: fs.readFileSync('./cert/cert.pem'),
+};
 
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://fuerza-seguros-project.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  next();
-});
+const app = express();
+
+const allowedOrigins = [
+  'https://fuerza-seguros-project.vercel.app',
+  'http://localhost:5173'
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(null, true); // Libera qualquer outro domínio também
+  },
+}));
+
 app.use(express.json());
 
-// Routes
+// Post Order routes
 app.use('/api/post-order', require('./post_orders'));
-app.use('/api/auth', require('./user_auth'));
-app.use('/api/blog', require('./blog_posts'));
-app.use('/api/attachments', require('./attachments'));
-app.use('/api/email', require('./emails'));
-app.use('/api/tags', require('./tags'));
 
-// Root test route
+// User authentication routes
+const userAuthRoutes = require('./user_auth');
+app.use('/api/auth', userAuthRoutes); 
+
+// Blog post routes
+const blogPostRoutes = require('./blog_posts');
+app.use('/api/blog', blogPostRoutes);
+
+// Attachments routes
+const attachmentRoutes = require('./attachments');
+app.use('/api/attachments', attachmentRoutes);
+
+// Email routes
+const emailRoutes = require('./emails');
+app.use('/api/email', emailRoutes);
+
+// Tags routes
+const tagRoutes = require('./tags');
+app.use('/api/tags', tagRoutes);
+
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error(err));
+
 app.get('/', (req, res) => {
   res.send('Fuerza Seguros API Running!');
 });
 
-// MongoDB connection
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-  .then(() => console.log('✅ Connected to MongoDB'))
-  .catch(err => console.error('❌ MongoDB error:', err));
+const PORT = process.env.PORT || 3000;
 
-// Start server (HTTPS local only)
-if (NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production') {
+  // Em produção (Railway), usa HTTP normal
   app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 Server running on port ${PORT} (production, HTTP behind proxy)`);
+    console.log(`Server running on port ${PORT} (production, HTTP)`);
   });
 } else {
-  const keyPath = './cert/key.pem';
-  const certPath = './cert/cert.pem';
-  if (fs.existsSync(keyPath) && fs.existsSync(certPath)) {
-    const sslOptions = {
-      key: fs.readFileSync(keyPath),
-      cert: fs.readFileSync(certPath),
-    };
-    https.createServer(sslOptions, app).listen(PORT, () => {
-      console.log(`🔐 Server running on https://localhost:${PORT} (development)`);
-    });
-  } else {
-    console.warn('⚠️ Cert files not found, falling back to HTTP');
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${PORT} (development)`);
-    });
-  }
+  // Em dev local, usa HTTPS com certificados
+  const sslOptions = {
+    key: fs.readFileSync('./cert/key.pem'),
+    cert: fs.readFileSync('./cert/cert.pem'),
+  };
+
+  https.createServer(sslOptions, app).listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on port ${PORT} (development, HTTPS)`);
+  });
 }
