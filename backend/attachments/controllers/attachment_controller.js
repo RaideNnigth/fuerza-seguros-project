@@ -26,18 +26,26 @@ exports.getAttachmentsPaginated = async (req, res) => {
 
     const total = await Attachment.countDocuments();
 
-    const attachments = await Attachment.find({})
-      .sort({ uploadedAt: -1 }) // ← ordena do mais novo para o mais antigo
+    const attachments = await Attachment.find({ data: { $exists: true, $ne: null } })
+      .sort({ uploadedAt: -1 })
       .skip(skip)
-      .limit(pageSize);
+      .limit(pageSize)
+      .allowDiskUse(true);
 
-    const response = attachments.map(a => ({
-      _id: a._id,
-      filename: a.filename,
-      mimetype: a.mimetype,
-      uploadedAt: a.uploadedAt,
-      base64: `data:${a.mimetype};base64,${a.data.toString('base64')}`
-    }));
+    const response = attachments.map(a => {
+      let base64 = null;
+      if (a.data && Buffer.isBuffer(a.data)) {
+        base64 = `data:${a.mimetype};base64,${a.data.toString('base64')}`;
+      }
+
+      return {
+        _id: a._id,
+        filename: a.filename,
+        mimetype: a.mimetype,
+        uploadedAt: a.uploadedAt,
+        base64
+      };
+    });
 
     res.json({
       page: pageIndex,
@@ -47,10 +55,15 @@ exports.getAttachmentsPaginated = async (req, res) => {
       results: response
     });
   } catch (err) {
-  console.error('Erro ao buscar anexos paginados:', err);
-  res.status(500).json({ message: 'Erro ao buscar anexos paginados', error: err.message });
+    console.error('Erro ao buscar anexos paginados:', err);
+    res.status(500).json({
+      message: 'Erro ao buscar anexos paginados',
+      error: err.message
+    });
   }
 };
+
+
 
 exports.getAttachmentByFilename = async (req, res) => {
   try {
