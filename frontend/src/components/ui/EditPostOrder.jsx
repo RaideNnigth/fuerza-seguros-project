@@ -45,29 +45,45 @@ export default function EditPostOrder() {
   const sensors = useSensors(useSensor(PointerSensor));
 
   useEffect(() => {
-    setLoading(true);
+  setLoading(true);
 
-    fetch(`${API_URL}/api/blog`)
-      .then(res => res.json())
-      .then(all => {
-        const filtered = all.filter(p =>
-          Array.isArray(p.tags) &&
-          p.tags.map(t => t.toLowerCase()).includes(tag.toLowerCase())
-        );
-        setPosts(filtered); // salva no estado
+  fetch(`${API_URL}/api/blog`)
+    .then(res => res.json())
+    .then(all => {
+      const filtered = all.filter(p =>
+        p.active === 'y' &&
+        Array.isArray(p.tags) &&
+        p.tags.map(t => t.toLowerCase()).includes(tag.toLowerCase())
+      );
 
-        return fetch(`${API_URL}/api/post-order/${tag}`)
-          .then(res => res.ok ? res.json() : { orderedPostIds: [] })
-          .then(data => {
-            if (Array.isArray(data.orderedPostIds) && data.orderedPostIds.length > 0) {
-              setOrderedIds(data.orderedPostIds);
-            } else {
-              // usa diretamente o "filtered" aqui
-              setOrderedIds(filtered.map(p => p._id));
-            }
-          });
-      })
-      .finally(() => setLoading(false));
+      console.log('FILTERED POSTS:', filtered);
+      setPosts(filtered);
+
+      return fetch(`${API_URL}/api/post-order/${tag}`)
+        .then(res => res.ok ? res.json() : { orderedPostIds: [] })
+        .then(data => {
+          console.log('ORDERED IDS:', data.orderedPostIds);
+
+          let ordered = [];
+          if (Array.isArray(data.orderedPostIds)) {
+            // Apenas os IDs que ainda estão nos posts filtrados
+            ordered = data.orderedPostIds.filter(id => filtered.some(p => p._id === id));
+          }
+
+          if (ordered.length > 0) {
+            setOrderedIds(ordered);
+          } else {
+            // fallback com todos os posts ativos com a tag
+            const fallbackIds = filtered.map(p => p._id);
+            console.log('FALLBACK IDS:', fallbackIds);
+            setOrderedIds(fallbackIds);
+          }
+        });
+    })
+    .catch(err => {
+      console.error('Erro ao buscar posts:', err);
+    })
+    .finally(() => setLoading(false));
   }, []);
 
   const onDragEnd = ({ active, over }) => {
