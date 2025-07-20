@@ -2,7 +2,6 @@ require('dotenv').config();
 
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
 const https = require('https');
 const fs = require('fs');
 
@@ -10,23 +9,13 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
-// Allowed origins for CORS
-const allowedOrigins = [
-  'https://fuerza-seguros-project.up.railway.app',
-  'https://fuerza-seguros-project-1rfq2xorq-raidennigths-projects.vercel.app',
-  'https://fuerza-seguros-project-git-master-raidennigths-projects.vercel.app',
-  'http://localhost:5173',
-];
-
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-    return callback(new Error('Not allowed by CORS'));
-  },
-  credentials: true,
-}));
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'https://fuerza-seguros-project.vercel.app');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  next();
+});
 app.use(express.json());
 
 // Routes
