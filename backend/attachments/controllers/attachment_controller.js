@@ -21,7 +21,11 @@ exports.uploadAttachment = async (req, res) => {
 exports.getAttachmentsPaginated = async (req, res) => {
   try {
     const pageIndex = parseInt(req.params.index);
-    const pageSize = 10;
+    const DEFAULT_PAGE_SIZE = 10;
+    const MAX_SAFE_PAGE_SIZE = 5;
+
+    // Reduz dinamicamente se estiver na primeira página (anexos mais pesados)
+    const pageSize = pageIndex === 0 ? MAX_SAFE_PAGE_SIZE : DEFAULT_PAGE_SIZE;
     const skip = pageIndex * pageSize;
 
     const total = await Attachment.countDocuments({ data: { $exists: true, $ne: null } });
