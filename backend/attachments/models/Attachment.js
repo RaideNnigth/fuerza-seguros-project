@@ -10,4 +10,7 @@ const attachmentSchema = new mongoose.Schema({
   }
 });
 
+// Índice para otimizar ordenação por data (paginada)
+attachmentSchema.index({ uploadedAt: -1 });
+
 module.exports = mongoose.model('Attachment', attachmentSchema);

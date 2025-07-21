@@ -26,7 +26,7 @@ exports.getAttachmentsPaginated = async (req, res) => {
 
     const total = await Attachment.countDocuments({ data: { $exists: true, $ne: null } });
 
-    const attachments = await Attachment.aggregate([
+    const attachments = await Attachment.collection.aggregate([
       { $match: { data: { $exists: true, $ne: null } } },
       { $sort: { uploadedAt: -1 } },
       { $skip: skip },
@@ -40,14 +40,16 @@ exports.getAttachmentsPaginated = async (req, res) => {
           data: 1
         }
       }
-    ]).allowDiskUse(true); // ← ESSENCIAL AQUI
+    ], { allowDiskUse: true }).toArray();
 
     const response = attachments.map(a => ({
       _id: a._id,
       filename: a.filename,
       mimetype: a.mimetype,
       uploadedAt: a.uploadedAt,
-      base64: a.data ? `data:${a.mimetype};base64,${a.data.toString('base64')}` : null
+      base64: a.data?.buffer
+        ? `data:${a.mimetype};base64,${a.data.buffer.toString('base64')}`
+        : null
     }));
 
     res.json({
