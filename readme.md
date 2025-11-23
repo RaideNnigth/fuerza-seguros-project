@@ -1,5 +1,7 @@
 existem configurações de enviroment para rodar de forma adequada
 
+
+
 backend/.env
     PORT=3000
     MONGO_URI=mongodb://localhost:27017/fuerzaseguros
@@ -9,6 +11,10 @@ backend/.env
     EMAIL_PASS=#App Pass
     EMAIL_SERVICE=gmail
     EMAIL_FOR_LEAD=#email para onde mandar o lead
+
+Para suporte Https -> inserir cert.pem e cert.key nas pastas 
+backend/cert
+frontend/cert
 
 frontend/.env
     VITE_API_URL=https://localhost:3000
