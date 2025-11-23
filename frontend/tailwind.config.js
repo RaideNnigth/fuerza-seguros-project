@@ -7,7 +7,11 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Novecento', 'sans-serif'], // substituirá o padrão
+        // Montserrat como fonte padrão do projeto
+        sans: ['Montserrat', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+
+        // opcional: se quiser usar explicitamente em títulos
+        heading: ['Montserrat', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       colors: {
         fuerza: {

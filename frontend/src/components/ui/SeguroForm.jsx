@@ -2,15 +2,21 @@ import { useState } from "react";
 import API_URL from "../../config/api";
 
 const initialForm = {
-  tipoConsorcio: "",
-  valorInvestimento: "",
+  produto: "",
   nome: "",
   telefone: "",
   email: "",
   horarioContato: "",
 };
 
-const CONSORCIO_OPTIONS = ["Imóveis", "Carros"];
+const SEGURO_OPTIONS = [
+  "Seguro Residencial",
+  "Seguro Empresarial",
+  "Seguro Auto",
+  "Seguro de Vida",
+  "Outros",
+];
+
 const BEST_TIME_OPTIONS = [
   "Manhã (08h–12h)",
   "Tarde (12h–18h)",
@@ -18,7 +24,7 @@ const BEST_TIME_OPTIONS = [
   "Qualquer horário",
 ];
 
-export default function ConsorcioForm({ title = "Orce seu consórcio" }) {
+export default function SeguroForm({ title = "Orce seu seguro" }) {
   const [form, setForm] = useState(initialForm);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
@@ -33,7 +39,6 @@ export default function ConsorcioForm({ title = "Orce seu consórcio" }) {
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const isPhoneValid = (phone) =>
     phone.replace(/\D/g, "").length >= 10;
-  const isValueValid = (v) => v && Number(v) > 0;
 
   const handleChange = (e) => {
     setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
@@ -41,9 +46,7 @@ export default function ConsorcioForm({ title = "Orce seu consórcio" }) {
   };
 
   const validate = () => {
-    if (!form.tipoConsorcio) return "Selecione o produto desejado.";
-    if (!isValueValid(form.valorInvestimento))
-      return "Informe um valor de crédito válido.";
+    if (!form.produto) return "Selecione o produto desejado.";
     if (!form.nome?.trim()) return "Informe seu nome.";
     if (!isPhoneValid(form.telefone)) return "Informe um telefone válido.";
     if (!isEmailValid(form.email)) return "Informe um e-mail válido.";
@@ -65,10 +68,9 @@ export default function ConsorcioForm({ title = "Orce seu consórcio" }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          subject: `Lead Consórcio - ${form.tipoConsorcio} - ${form.nome}`,
+          subject: `Lead Seguro - ${form.produto} - ${form.nome}`,
           text:
-            `Produto: ${form.tipoConsorcio}\n` +
-            `Valor de crédito: ${form.valorInvestimento}\n` +
+            `Produto: ${form.produto}\n` +
             `Nome: ${form.nome}\n` +
             `Telefone: ${form.telefone}\n` +
             `E-mail: ${form.email}\n` +
@@ -108,31 +110,17 @@ export default function ConsorcioForm({ title = "Orce seu consórcio" }) {
       <div>
         <label className={labelClass}>Selecione o produto desejado</label>
         <select
-          name="tipoConsorcio"
-          value={form.tipoConsorcio}
+          name="produto"
+          value={form.produto}
           onChange={handleChange}
           required
           className={inputClass}
         >
           <option value="" disabled>Selecione</option>
-          {CONSORCIO_OPTIONS.map((opt) => (
+          {SEGURO_OPTIONS.map((opt) => (
             <option key={opt} value={opt}>{opt}</option>
           ))}
         </select>
-      </div>
-
-      <div>
-        <label className={labelClass}>Insira o valor de crédito que deseja</label>
-        <input
-          name="valorInvestimento"
-          type="number"
-          min="0"
-          step="any"
-          value={form.valorInvestimento}
-          onChange={handleChange}
-          required
-          className={inputClass}
-        />
       </div>
 
       <div>

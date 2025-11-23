@@ -1,5 +1,5 @@
 import HeroSection from '../components/ui/HeroSection';
-import ConsorcioForm from '../components/ui/ConsorcioForm';
+import CotacaoSection from "../components/ui/CotacaoSection";
 import ConsorcioCarousel from '../components/ui/ConsorcioCarousel';
 import About from '../components/ui/About';
 import SeguradorasStrip from '../components/ui/SeguradorasStrip';
@@ -7,13 +7,14 @@ import SeguradorasStrip from '../components/ui/SeguradorasStrip';
 export default function Home() {
   return (
     <div className="w-full">
-      {/* Hero Mars style com curva SVG */}
+
+      {/* Seção Hero */}
       <HeroSection />
 
-      {/* Carousel que controla os concorcios */}
+      {/* Carousel de consórcios */}
       <ConsorcioCarousel />
 
-      {/* Banda de logos animada */}
+      {/* Faixa de seguradoras */}
       <SeguradorasStrip />
 
       {/* Sobre nós */}
@@ -21,10 +22,9 @@ export default function Home() {
         <About />
       </div>
 
-      {/* Formulário direto */}
-      <div className="bg-gray-100 rounded-xl shadow-lg p-8 flex flex-col justify-center items-center">
-        <ConsorcioForm />
-      </div>
+      {/* SEÇÃO CORRETA DOS FORMULÁRIOS */}
+      <CotacaoSection />
+
     </div>
   );
 }
