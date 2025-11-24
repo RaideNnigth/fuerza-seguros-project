@@ -46,7 +46,7 @@ export default function ConsorcioCarousel() {
         // 5. Caso não haja ordem salva, usar todos os posts com a tag
         const fallback = postsData.filter(
             p =>
-            p.active === 'y' && // <-- Aqui também
+            p.active === 'y' &&
             Array.isArray(p.tags) &&
             p.tags.map(t => t.toLowerCase()).includes(tag)
           );
@@ -73,20 +73,32 @@ export default function ConsorcioCarousel() {
   }, []);
 
   return (
-    <section className="bg-white">
+    <section className="bg-white py-12">
       <div className="max-w-6xl mx-auto px-4">
-        <h2 className="text-2xl font-bold text-center text-fuerza-azul mb-8">Conheça nossos Consórcios</h2>
+
+        {/* Título igual ao layout novo */}
+        <div className="text-center mb-10">
+          <p className="text-xs md:text-sm tracking-[0.25em] uppercase text-gray-400">
+            Conheça alguns dos nossos
+          </p>
+          <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900">
+            principais <span className="text-fuerza-laranja">produtos</span>
+          </h2>
+        </div>
+
         <Swiper
-          spaceBetween={24}
+          spaceBetween={20}
           slidesPerView={1}
           breakpoints={{
             640: { slidesPerView: 1 },
             768: { slidesPerView: 2 },
             1024: { slidesPerView: 3 },
+            1280: { slidesPerView: 4 }, // no layout parece 4 cards no desktop
           }}
+          className="pb-2"
         >
           {consorcios.map((post) => (
-            <SwiperSlide key={post._id}>
+            <SwiperSlide key={post._id} className="h-auto">
               <BlogCard post={post} />
             </SwiperSlide>
           ))}

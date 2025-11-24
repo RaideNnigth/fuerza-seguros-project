@@ -20,7 +20,7 @@ const Tag = require('./models/Tag');
     'cartão de crédito',
     'capitalização',
     'imóvel',
-    'consórcio de automóvel',
+    'consórcio de veículos',
     'consórcio de imóvel',
     'consórcio de serviços',
     'plano de saúde',
@@ -40,6 +40,7 @@ const Tag = require('./models/Tag');
     'benefício',
     'adesão',
     'parcelamento',
+    'previdência privada',
     'home page'
   ];
   for (let tagName of defaultTags) {
