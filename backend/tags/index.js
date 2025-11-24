@@ -41,7 +41,8 @@ const Tag = require('./models/Tag');
     'adesão',
     'parcelamento',
     'previdência privada',
-    'home page'
+    'home page',
+    'home page seguro'
   ];
   for (let tagName of defaultTags) {
     await Tag.updateOne(
