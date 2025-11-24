@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ConsorcioForm from "./ConsorcioForm";
 import SeguroForm from "./SeguroForm";
 import SolucaoImobiliariaForm from "./SolucaoImobiliariaForm";
@@ -9,26 +9,34 @@ const OPTIONS = [
   { key: "imobiliaria", label: "SOLUÇÃO IMOBILIÁRIA" },
 ];
 
-export default function CotacaoSection() {
-  // começa sem nada selecionado
+export default function CotacaoSection({ initialType = null }) {
+  // estado principal do seletor
   const [active, setActive] = useState(null);
+
+  // quando a página chama com "initialType", ativa automaticamente
+  useEffect(() => {
+    if (initialType) {
+      setActive(initialType);
+    }
+  }, [initialType]);
 
   return (
     <section className="w-full py-12">
       <div className="max-w-4xl mx-auto px-4 space-y-6">
 
-        {/* CARD DO SELETOR */}
+        {/* CARD PRINCIPAL */}
         <div className="bg-white rounded-3xl shadow-lg border border-gray-200 p-8 space-y-5">
+          
           <h2 className="text-lg font-bold uppercase text-center text-gray-900 tracking-wider">
             Solicite uma cotação
           </h2>
 
-          <p className="text-center text-gray-600 text-sm">
+          <p className="text-center text-gray-600 text-sm leading-relaxed">
             Aqui seu orçamento é rápido. Selecione o tipo de cotação e preencha
             os campos para que um corretor entre em contato.
           </p>
 
-          {/* 3 botões */}
+          {/*  BOTÕES DE SELEÇÃO */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {OPTIONS.map((opt) => {
               const isActive = active === opt.key;
@@ -47,18 +55,13 @@ export default function CotacaoSection() {
           </div>
         </div>
 
-        {/* FORM APARECE ABAIXO DO SELETOR */}
-        {active === "consorcio" && (
-          <ConsorcioForm />
-        )}
+        {/* FORMULÁRIOS ABAIXO DO CARD */}
+        {active === "consorcio" && <ConsorcioForm />}
 
-        {active === "seguro" && (
-          <SeguroForm />
-        )}
+        {active === "seguro" && <SeguroForm />}
 
-        {active === "imobiliaria" && (
-          <SolucaoImobiliariaForm />
-        )}
+        {active === "imobiliaria" && <SolucaoImobiliariaForm />}
+
       </div>
     </section>
   );

@@ -1,28 +1,33 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import API_URL from "../../config/api";
 import DEFAULT_THUMBNAIL from "../../assets/images/default-thumbnail.png";
 
-export default function SegurosHomeSection() {
+export default function SegurosHomeSection({ onGoToCotacao }) {
   const [seguros, setSeguros] = useState([]);
 
   useEffect(() => {
     const fetchSegurosOrdenados = async () => {
       const tagHomeSeguro = "home page seguro";
 
+      const norm = (s = "") =>
+        s
+          .toString()
+          .toLowerCase()
+          .trim()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "");
+
       try {
-        // 1. Buscar todos os posts
         const postsRes = await fetch(`${API_URL}/api/blog`);
         const postsData = await postsRes.json();
 
-        // 2. Criar dicionário de posts por ID
         const postsById = {};
-        postsData.forEach((p) => {
-          postsById[p._id] = p;
-        });
+        postsData.forEach((p) => (postsById[p._id] = p));
 
-        // 3. Buscar ordem salva da tag
-        const orderRes = await fetch(`${API_URL}/api/post-order/${tagHomeSeguro}`);
+        const orderRes = await fetch(
+          `${API_URL}/api/post-order/${tagHomeSeguro}`
+        );
         let orderedPostIds = [];
 
         if (orderRes.ok) {
@@ -32,28 +37,22 @@ export default function SegurosHomeSection() {
             : [];
         }
 
-        // helper: verificar se o post contém a tag única
         const hasTagHomeSeguro = (p) => {
-          const tags = Array.isArray(p.tags)
-            ? p.tags.map((t) => t.toLowerCase().trim())
-            : [];
-          return tags.includes(tagHomeSeguro);
+          const tags = Array.isArray(p.tags) ? p.tags.map(norm) : [];
+          return tags.includes(norm(tagHomeSeguro));
         };
 
-        // 4. Lista ordenada
+        const isSeguroHomePost = (p) =>
+          p && p.active === "y" && hasTagHomeSeguro(p);
+
         const ordered = orderedPostIds
           .map((id) => postsById[id])
-          .filter((p) => p && p.active === "y" && hasTagHomeSeguro(p));
+          .filter(isSeguroHomePost);
 
-        // 5. Fallback
-        const fallback = postsData.filter(
-          (p) => p.active === "y" && hasTagHomeSeguro(p)
-        );
+        const fallback = postsData.filter(isSeguroHomePost);
 
-        // 6. Limitar a 2
         const finalList = (ordered.length > 0 ? ordered : fallback).slice(0, 2);
 
-        // 7. Mapear campos
         const mapped = finalList.map((post) => ({
           ...post,
           image: post.cover
@@ -62,8 +61,9 @@ export default function SegurosHomeSection() {
           category: post.tags?.[0]?.toLowerCase() || "blog",
           title: post.title || "sem título",
           excerpt: post.htmlContent
-            ? post.htmlContent.replace(/<[^>]+>/g, "").slice(0, 180) + "..."
-            : "",
+            ?.replace(/<img[^>]*>/gi, "")
+            .replace(/<[^>]+>/g, "")
+            .slice(0, 180) + "…",
           author: post.author || "Equipe Fuerza",
           date: post.createdAt
             ? new Date(post.createdAt).toLocaleDateString("pt-BR")
@@ -96,7 +96,7 @@ export default function SegurosHomeSection() {
         {/* LISTA DE SEGUROS */}
         <div className="flex flex-col gap-10">
           {seguros.map((post, idx) => {
-            const reverse = idx % 2 === 1; // alterna layout igual ao print
+            const reverse = idx % 2 === 1;
 
             return (
               <div
@@ -115,8 +115,9 @@ export default function SegurosHomeSection() {
                     {post.excerpt}
                   </p>
 
-                  <Link
-                    to={`/blog/${post._id}`}
+                  {/* ⭐ IMPORTANTE: botão agora usa a lógica igual ao Consórcios */}
+                  <button
+                    onClick={() => onGoToCotacao("seguro")}
                     className={`inline-flex items-center px-4 py-2 rounded-md text-white text-xs font-semibold uppercase tracking-wide transition ${
                       reverse
                         ? "bg-fuerza-laranja hover:bg-orange-500"
@@ -124,7 +125,7 @@ export default function SegurosHomeSection() {
                     }`}
                   >
                     Solicite uma cotação
-                  </Link>
+                  </button>
                 </div>
 
                 {/* Imagem */}

@@ -41,6 +41,7 @@ const Tag = require('./models/Tag');
     'adesão',
     'parcelamento',
     'previdência privada',
+    'solução imobiliária',
     'home page',
     'home page seguro'
   ];

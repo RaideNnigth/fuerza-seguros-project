@@ -4,12 +4,12 @@ import API_URL from "../config/api";
 import DEFAULT_THUMBNAIL from "../assets/images/default-thumbnail.png";
 import CotacaoSection from "../components/ui/CotacaoSection";
 
-export default function Seguros() {
+export default function SolucoesImobiliarias() {
   const [posts, setPosts] = useState([]);
   const [cotacaoSelection, setCotacaoSelection] = useState(null);
   const cotacaoRef = useRef(null);
 
-  // fundo azul igual ao HeroSection
+  // fundo da página igual ao Hero
   useEffect(() => {
     const prev = document.body.style.backgroundColor;
     document.body.style.backgroundColor = "#1A365D";
@@ -18,7 +18,7 @@ export default function Seguros() {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const tag = "seguro";
+      const tag = "solução imobiliária"; // <-- altere aqui se sua TAG for outra!
 
       const norm = (s = "") =>
         s
@@ -35,7 +35,7 @@ export default function Seguros() {
         const postsById = {};
         data.forEach((p) => (postsById[p._id] = p));
 
-        // buscar ordem via API
+        // buscar ordem salva
         const orderRes = await fetch(`${API_URL}/api/post-order/${tag}`);
         let orderedIds = [];
 
@@ -46,7 +46,7 @@ export default function Seguros() {
             : [];
         }
 
-        const isSeguro = (p) =>
+        const isImobiliaria = (p) =>
           p &&
           p.active === "y" &&
           Array.isArray(p.tags) &&
@@ -54,19 +54,18 @@ export default function Seguros() {
 
         const ordered = orderedIds
           .map((id) => postsById[id])
-          .filter(isSeguro);
+          .filter(isImobiliaria);
 
-        const fallback = data.filter(isSeguro);
+        const fallback = data.filter(isImobiliaria);
 
         const finalList = ordered.length > 0 ? ordered : fallback;
 
-        // mapar pro componente
         const mapped = finalList.map((post) => ({
           _id: post._id,
           image: post.cover
             ? `${API_URL}/api/attachments/${post.cover}`
             : DEFAULT_THUMBNAIL,
-          category: post.tags?.[0] || "seguro",
+          category: post.tags?.[0] || "solução imobiliária",
           title: post.title || "Sem título",
           excerpt:
             post.htmlContent
@@ -81,17 +80,17 @@ export default function Seguros() {
 
         setPosts(mapped);
       } catch (err) {
-        console.error("Erro ao buscar posts de seguros:", err);
+        console.error("Erro ao buscar posts de soluções imobiliárias:", err);
       }
     };
 
     fetchPosts();
   }, []);
 
-  // lógica de rolagem + pré-seleção SEGURO
+  // rolar pro formulário + pré-selecionar imobiliaria
   const goToCotacao = () => {
-    setCotacaoSelection("seguro");
-    localStorage.setItem("cotacao_preselect", "seguro");
+    setCotacaoSelection("imobiliaria");
+    localStorage.setItem("cotacao_preselect", "imobiliaria");
 
     cotacaoRef.current?.scrollIntoView({
       behavior: "smooth",
@@ -102,19 +101,19 @@ export default function Seguros() {
   return (
     <div className="w-full min-h-screen bg-[#1A365D] overflow-x-hidden">
 
-      {/* HERO IGUAL AO DE CONSÓRCIOS */}
+      {/* HERO */}
       <section className="w-full bg-[#1A365D] text-white pt-28 md:pt-32">
         <div className="max-w-7xl mx-auto px-6 py-20 flex flex-col md:flex-row md:items-center gap-10">
           <div className="flex flex-col max-w-xl text-center md:text-left">
             <h1 className="text-3xl md:text-5xl font-semibold tracking-wide leading-tight">
               FUERZA <br />
-              <span className="text-fuerza-laranja font-bold">SEGUROS</span>
+              <span className="text-fuerza-laranja font-bold">SOLUÇÕES IMOBILIÁRIAS</span>
             </h1>
 
             <p className="mt-4 text-sm md:text-base text-white/80 tracking-wide">
-              Consultoria especializada para identificar a melhor estratégia de
-              proteção para sua vida, empresa ou patrimônio, com atendimento 
-              humanizado e soluções completas.
+              Realize seu sonho com estratégia, segurança e planejamento.
+              Trabalhamos com ferramentas e suporte especializado para transformar
+              seu objetivo imobiliário em realidade.
             </p>
 
             <div className="mt-6 flex flex-wrap justify-center md:justify-start gap-3">
@@ -136,11 +135,12 @@ export default function Seguros() {
         </h2>
 
         <p className="text-3xl md:text-4xl font-bold text-[#1A365D] mt-1 tracking-wide uppercase">
-          Soluções em <span className="text-fuerza-laranja">Seguros</span>
+          Soluções <span className="text-fuerza-laranja">Imobiliárias</span>
         </p>
 
         <p className="mt-4 text-gray-600 text-sm md:text-base tracking-wide max-w-2xl mx-auto">
-          Soluções completas para proteção pessoal, empresarial e patrimonial.
+          Trabalhamos com crédito, planejamento financeiro e consultoria dedicada
+          para facilitar a conquista do seu imóvel.
         </p>
       </section>
 
@@ -156,17 +156,17 @@ export default function Seguros() {
       {/* OUTRAS FINALIDADES */}
       <section className="w-full bg-white text-center py-16">
         <h2 className="text-2xl font-semibold tracking-wide text-fuerza-laranja uppercase">
-          Outros produtos
+          Outras finalidades
         </h2>
 
         <p className="mt-4 text-gray-700 text-sm md:text-base tracking-wide max-w-3xl mx-auto leading-relaxed">
-          Seguro Agrícola • Responsabilidade Civil • Transportes e Cargas •
-          Seguro Garantia • Riscos de Engenharia • Frota de Veículos •
-          Equipamentos • Empresarial • Condominial e muito mais.
+          Financiamento imobiliário • Refinanciamento • Consultoria de crédito •
+          Planejamento de compra • Regularização de imóveis • Avaliação mercadológica
+          e muito mais.
         </p>
       </section>
 
-      {/* COTAÇÃO */}
+      {/* FORMULÁRIO */}
       <section
         ref={cotacaoRef}
         id="cotacao"
@@ -177,7 +177,7 @@ export default function Seguros() {
         </h3>
 
         <p className="text-white/80 mt-3 text-sm md:text-base tracking-wide max-w-2xl mx-auto">
-          Fale com nossa equipe especializada e encontre o seguro ideal para você.
+          Receba orientação especializada e encontre a solução perfeita para seu projeto.
         </p>
 
         <div className="mt-8 flex justify-center">

@@ -31,6 +31,7 @@ export default function Navbar() {
           <NavLink to="/" className={navItemClass}>Home</NavLink>
           <NavLink to="/consorcios" className={navItemClass}>Consórcios</NavLink>
           <NavLink to="/seguros" className={navItemClass}>Seguros</NavLink>
+          <NavLink to="/solucoes-imobiliarias" className={navItemClass}>Soluções Imobiliárias</NavLink>
           <NavLink to="/blog" className={navItemClass}>Blog</NavLink>
         </nav>
 
@@ -65,12 +66,19 @@ export default function Navbar() {
           <NavLink to="/" onClick={() => setOpen(false)} className={navItemClass}>
             Home
           </NavLink>
+
           <NavLink to="/consorcios" onClick={() => setOpen(false)} className={navItemClass}>
             Consórcios
           </NavLink>
+
           <NavLink to="/seguros" onClick={() => setOpen(false)} className={navItemClass}>
             Seguros
           </NavLink>
+
+          <NavLink to="/solucoes-imobiliarias" onClick={() => setOpen(false)} className={navItemClass}>
+            Soluções Imobiliárias
+          </NavLink>
+
           <NavLink to="/blog" onClick={() => setOpen(false)} className={navItemClass}>
             Blog
           </NavLink>

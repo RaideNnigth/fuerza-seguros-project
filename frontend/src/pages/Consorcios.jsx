@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import BlogCard from "../components/ui/BlogCard";
 import API_URL from "../config/api";
 import DEFAULT_THUMBNAIL from "../assets/images/default-thumbnail.png";
@@ -6,46 +6,39 @@ import CotacaoSection from "../components/ui/CotacaoSection";
 
 export default function Consorcios() {
   const [posts, setPosts] = useState([]);
+  const [cotacaoSelection, setCotacaoSelection] = useState(null);
+  const cotacaoRef = useRef(null);
 
+  // Mantém o fundo azul igual ao HeroSection
   useEffect(() => {
-    // ✅ garante que qualquer espaço fora do componente (ex.: mt-10 do footer)
-    // fique azul e não branco
-    const prevBg = document.body.style.backgroundColor;
-    document.body.style.backgroundColor = "#0B2D6B";
-    return () => {
-      document.body.style.backgroundColor = prevBg;
-    };
+    const prev = document.body.style.backgroundColor;
+    document.body.style.backgroundColor = "#1A365D";
+    return () => (document.body.style.backgroundColor = prev);
   }, []);
 
   useEffect(() => {
     const fetchConsorciosOrdenados = async () => {
-      const tagConsorcio = "consórcio"; // ✅ tag ORIGINAL
+      const tagConsorcio = "consórcio";
 
-      // helper pra comparar tags ignorando maiúsculas/acentos
       const norm = (s = "") =>
         s
           .toString()
           .toLowerCase()
           .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, ""); // remove acentos
+          .replace(/[\u0300-\u036f]/g, "");
 
       try {
-        // 1) busca todos posts
         const postsRes = await fetch(`${API_URL}/api/blog`);
         const postsData = await postsRes.json();
 
-        // 2) index por id
         const postsById = {};
-        postsData.forEach((p) => {
-          postsById[p._id] = p;
-        });
+        postsData.forEach((p) => (postsById[p._id] = p));
 
-        // 3) busca ordem salva da TAG consórcio (mesmo padrão do carousel)
         const orderRes = await fetch(
           `${API_URL}/api/post-order/${tagConsorcio}`
         );
-        let orderedPostIds = [];
 
+        let orderedPostIds = [];
         if (orderRes.ok) {
           const orderData = await orderRes.json();
           orderedPostIds = Array.isArray(orderData.orderedPostIds)
@@ -59,17 +52,14 @@ export default function Consorcios() {
           Array.isArray(p.tags) &&
           p.tags.map(norm).includes(norm(tagConsorcio));
 
-        // 4) lista ordenada (se existir)
         const ordered = orderedPostIds
           .map((id) => postsById[id])
           .filter(isConsorcioPost);
 
-        // 5) fallback (todos os posts de consórcio)
         const fallback = postsData.filter(isConsorcioPost);
 
         const finalList = ordered.length > 0 ? ordered : fallback;
 
-        // 6) map pro BlogCard
         const mapped = finalList.map((post) => ({
           _id: post._id,
           image: post.cover
@@ -77,12 +67,11 @@ export default function Consorcios() {
             : DEFAULT_THUMBNAIL,
           category: post.tags?.[0] || "consórcio",
           title: post.title || "sem título",
-          excerpt: post.htmlContent
-            ? post.htmlContent
-                .replace(/<img[^>]*>/gi, "")
-                .replace(/<[^>]+>/g, "")
-                .slice(0, 120) + "..."
-            : "",
+          excerpt:
+            post.htmlContent
+              ?.replace(/<img[^>]*>/gi, "")
+              .replace(/<[^>]+>/g, "")
+              .slice(0, 120) + "…" || "",
           author: post.author || "Equipe Fuerza",
           date: post.createdAt
             ? new Date(post.createdAt).toLocaleDateString("pt-BR")
@@ -98,105 +87,103 @@ export default function Consorcios() {
     fetchConsorciosOrdenados();
   }, []);
 
+  // Scroll suave + preselect
+  const goToCotacao = (type = null) => {
+    setCotacaoSelection(type);
+
+    if (type) localStorage.setItem("cotacao_preselect", type);
+    else localStorage.removeItem("cotacao_preselect");
+
+    cotacaoRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
-    // ✅ wrapper azul full, sem bg-white geral pra não “vazar” branco
-    <div className="w-full min-h-screen bg-[#0B2D6B] overflow-x-hidden">
-      {/* HERO */}
-      <section className="w-full bg-[#0B2D6B] text-white pt-28 md:pt-32">
-        <div className="max-w-7xl mx-auto px-6 py-14 md:py-20 min-h-[100px] flex flex-col justify-center">
-          <h1 className="text-3xl md:text-4xl font-extrabold leading-tight">
-            FUERZA <br />
-            <span className="text-[#F7931E]">CONSÓRCIOS</span>
-          </h1>
+    <div className="w-full min-h-screen bg-[#1A365D] overflow-x-hidden">
 
-          <p className="text-sm md:text-base mt-4 max-w-2xl leading-relaxed text-white/90">
-            Descubra a forma mais inteligente de conquistar seus objetivos.
-            Com nosso consórcio, você tem acesso a crédito sem juros,
-            com taxas e parcelas que cabem no seu orçamento.
-          </p>
+      {/* HERO — estilo igual ao HeroSection */}
+      <section className="w-full bg-[#1A365D] text-white pt-28 md:pt-32">
+        <div className="max-w-7xl mx-auto px-6 py-20 flex flex-col md:flex-row md:items-center gap-10">
+          <div className="flex flex-col max-w-xl text-center md:text-left">
+            <h1 className="text-3xl md:text-5xl font-semibold tracking-wide leading-tight">
+              FUERZA <br />
+              <span className="text-fuerza-laranja font-bold">CONSÓRCIOS</span>
+            </h1>
 
-          <div className="flex gap-3 mt-6 flex-wrap">
-            <a
-              href="#cotacao"
-              className="px-5 py-2 bg-[#F7931E] text-white font-semibold rounded-md shadow hover:bg-[#d87f16] transition text-sm uppercase"
-            >
-              Criar consórcio
-            </a>
+            <p className="mt-4 text-sm md:text-base text-white/80 tracking-wide">
+              Descubra a forma mais inteligente de conquistar seus objetivos.
+              Com nosso consórcio, você tem acesso a crédito sem juros,
+              com taxas e parcelas que cabem no seu orçamento.
+            </p>
 
-            <a
-              href="#cotacao"
-              className="px-5 py-2 bg-transparent border border-white text-white font-semibold rounded-md shadow hover:bg-white/10 transition text-sm uppercase"
-            >
-              Fale conosco
-            </a>
+            <div className="mt-6 flex flex-wrap justify-center md:justify-start gap-3">
+
+              {/* 👉 Agora pré-seleciona consorcio */}
+              <button
+                onClick={() => goToCotacao("consorcio")}
+                className="bg-fuerza-laranja px-6 py-2 rounded-md text-white font-semibold hover:bg-orange-500 transition tracking-wide uppercase"
+              >
+                Solicite uma cotação
+              </button>
+
+            </div>
           </div>
         </div>
       </section>
 
-      {/* BLOCO BRANCO: título produtos */}
-      <section className="w-full bg-white">
-        <div className="max-w-7xl mx-auto px-6 pt-14 pb-8 text-center">
-          <h2 className="text-sm font-bold tracking-widest text-[#0B2D6B] uppercase">
-            Nossos produtos de
-          </h2>
-          <p className="text-2xl font-extrabold text-[#F7931E] mt-1 uppercase">
-            Consórcio
-          </p>
-          <p className="text-gray-600 text-sm mt-2 max-w-3xl mx-auto">
-            Escolha o consórcio ideal para suas necessidades. Temos soluções para
-            diversas finalidades com condições especiais e atendimento personalizado.
-          </p>
+      {/* PRODUTOS */}
+      <section className="w-full bg-white text-center py-16">
+        <h2 className="text-sm font-semibold text-[#1A365D] uppercase tracking-[0.25em]">
+          Nossos produtos de
+        </h2>
+        <p className="text-3xl font-bold text-fuerza-laranja tracking-wide mt-1 uppercase">
+          Consórcio
+        </p>
+        <p className="mt-4 text-gray-600 text-sm md:text-base tracking-wide max-w-2xl mx-auto">
+          Escolha o consórcio ideal para suas necessidades.
+          Temos soluções para diversas finalidades.
+        </p>
+      </section>
+
+      {/* GRID */}
+      <section className="w-full bg-white pb-16 px-6">
+        <div className="max-w-7xl mx-auto grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {posts.map((post) => (
+            <BlogCard post={post} key={post._id} />
+          ))}
         </div>
       </section>
 
-      {/* BLOCO BRANCO: grid */}
-      <section className="w-full bg-white">
-        <div className="max-w-7xl mx-auto px-6 pb-10">
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {posts.map((post, idx) => (
-              <BlogCard key={post._id || idx} post={post} />
-            ))}
-          </div>
-        </div>
+      {/* OUTRAS FINALIDADES */}
+      <section className="w-full bg-white text-center py-16">
+        <h2 className="text-2xl font-semibold tracking-wide text-fuerza-laranja uppercase">
+          Outras finalidades
+        </h2>
+
+        <p className="mt-4 text-gray-700 text-sm md:text-base tracking-wide max-w-3xl mx-auto leading-relaxed">
+          Você pode utilizar um consórcio para realizar todo tipo de sonhos:
+          cirurgias, viagens, cursos, formaturas, imóveis, veículos, barcos…
+          <br /><br />
+          Fale com nossos especialistas e consulte possibilidades e planos.
+        </p>
       </section>
 
-      {/* BLOCO BRANCO: outras finalidades */}
-      <section className="w-full bg-white">
-        <div className="max-w-5xl mx-auto px-6 pt-8 pb-12 text-center">
-          <h2 className="text-sm font-bold tracking-widest text-[#0B2D6B] uppercase">
-            Outras finalidades
-          </h2>
-
-          <p className="text-gray-700 mt-4 leading-relaxed text-sm md:text-base">
-            Você pode utilizar um consórcio para realizar todo tipo de sonhos.
-            Cirurgias plásticas, procedimentos estéticos, fazer uma festa de casamento
-            ou formatura, pagar a faculdade ou outros cursos técnicos, de especialização
-            ou de idiomas. Até mesmo planejar aquela viagem dos sonhos!
-            <br /><br />
-            Se o seu sonho é navegar, você pode optar por comprar barcos, lanchas,
-            jet ski, motores de popa, etc., novos ou usados.
-            <br /><br />
-            Fale com nossos especialistas e consulte possibilidades e planos.
-          </p>
-        </div>
-      </section>
-
-      {/* CTA + Cotação (azul) */}
+      {/* COTAÇÃO */}
       <section
+        ref={cotacaoRef}
         id="cotacao"
-        className="w-full bg-[#0B2D6B] py-12 px-6 text-center"
+        className="w-full bg-[#1A365D] py-16 text-center px-6"
       >
-        <h3 className="text-white font-extrabold text-lg tracking-widest uppercase">
+        <h3 className="text-white text-xl md:text-2xl font-bold tracking-wide uppercase">
           Pronto para começar?
         </h3>
-        <p className="text-white/90 text-sm mt-2 max-w-3xl mx-auto">
-          Fale com nossos especialistas e descubra qual consórcio é ideal para você.
-          Simule sem compromisso e tenha atendimento personalizado.
+
+        <p className="text-white/80 mt-3 text-sm md:text-base tracking-wide max-w-2xl mx-auto">
+          Simule sem compromisso e descubra qual consórcio é ideal para você.
         </p>
 
-        <div className="mt-6 flex justify-center">
+        <div className="mt-8 flex justify-center">
           <div className="w-full max-w-xl">
-            <CotacaoSection />
+            <CotacaoSection initialType={cotacaoSelection} />
           </div>
         </div>
       </section>
