@@ -67,114 +67,10 @@ export default function ArticleView() {
 
   return (
     <div className="bg-white pt-24 md:pt-28">
-      {/* estilos locais pra render ficar igual ao TipTap/gerenciador */}
-      <style>
-        {`
-          .article-html {
-            font-size: 1rem;
-            line-height: 1.7;
-            color: #0f172a;
-          }
-
-          .article-html p {
-            margin-bottom: 1em;
-            font-family: "Times New Roman", Times, serif;
-            font-size: 1.05rem;
-            line-height: 1.75;
-            text-align: justify;
-            color: #334155;
-          }
-
-          .article-html h1 {
-            font-size: 2.2rem;
-            font-weight: 800;
-            margin: 1.3em 0 0.7em 0;
-            line-height: 1.1;
-            font-family: "Novecento", ui-sans-serif, system-ui;
-            color: #0f172a;
-          }
-
-          .article-html h2 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin: 1.2em 0 0.7em 0;
-            line-height: 1.2;
-            font-family: "Novecento", ui-sans-serif, system-ui;
-            color: #0f172a;
-          }
-
-          .article-html h3 {
-            font-size: 1.17rem;
-            font-weight: 600;
-            margin: 1.1em 0 0.5em 0;
-            line-height: 1.2;
-            font-family: "Novecento", ui-sans-serif, system-ui;
-            color: #0f172a;
-          }
-
-          .article-html strong { font-weight: bold; color: #0f172a; }
-          .article-html em { font-style: italic; }
-
-          .article-html a {
-            text-decoration: underline;
-            color: #1A365D;
-            font-weight: 600;
-          }
-
-          .article-html ul, .article-html ol {
-            padding-left: 1.5em;
-            margin-bottom: 1em;
-          }
-
-          .article-html li {
-            margin: 0.25em 0;
-            font-family: "Times New Roman", Times, serif;
-            color: #334155;
-          }
-
-          .article-html table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1em 0;
-            background: #f8fafc;
-            border-radius: 8px;
-            overflow: hidden;
-            font-size: 0.95rem;
-          }
-          .article-html th, .article-html td {
-            border: 1px solid #e2e8f0;
-            padding: 8px 12px;
-            text-align: left;
-            vertical-align: top;
-          }
-          .article-html th {
-            background: #f1f5f9;
-            font-weight: bold;
-          }
-
-          .article-html img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 12px;
-            margin: 1.2em auto;
-            display: block;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-          }
-
-          .article-html blockquote {
-            border-left: 4px solid #F97316;
-            padding-left: 1rem;
-            font-style: italic;
-            color: #475569;
-            margin: 1em 0;
-          }
-        `}
-      </style>
-
       <article className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
         {/* Header clean */}
         <header className="mb-8 text-center">
-          <h1 className="text-3xl sm:text-4xl font-serif font-bold text-slate-900">
+          <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 font-['Novecento']">
             {article.title}
           </h1>
 
@@ -216,10 +112,91 @@ export default function ArticleView() {
           </div>
         )}
 
-        {/* Conteúdo HTML no mesmo estilo do gerenciador */}
+        {/* Conteúdo HTML — Tailwind puro */}
         <section className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 sm:p-8">
           <div
-            className="article-html"
+            className="
+              article-html font-sans text-slate-800 leading-relaxed text-base
+
+              [&>p]:mb-4
+              [&>p]:text-justify
+              [&>p]:text-slate-700
+              [&>p]:leading-relaxed
+
+              [&>h1]:mt-8 [&>h1]:mb-4
+              [&>h1]:text-3xl [&>h1]:sm:text-4xl
+              [&>h1]:font-extrabold
+              [&>h1]:leading-tight
+              [&>h1]:font-['Novecento']
+              [&>h1]:text-slate-900
+
+              [&>h2]:mt-7 [&>h2]:mb-3
+              [&>h2]:text-2xl [&>h2]:sm:text-3xl
+              [&>h2]:font-bold
+              [&>h2]:leading-snug
+              [&>h2]:font-['Novecento']
+              [&>h2]:text-slate-900
+
+              [&>h3]:mt-6 [&>h3]:mb-2
+              [&>h3]:text-xl [&>h3]:sm:text-2xl
+              [&>h3]:font-semibold
+              [&>h3]:leading-snug
+              [&>h3]:font-['Novecento']
+              [&>h3]:text-slate-900
+
+              [&>strong]:font-bold
+              [&_strong]:font-bold
+
+              [&>em]:italic
+              [&_em]:italic
+
+              [&>a]:underline
+              [&>a]:text-[#1A365D]
+              [&>a]:font-semibold
+              [&_a]:underline
+              [&_a]:text-[#1A365D]
+              [&_a]:font-semibold
+
+              [&>ul]:pl-6 [&>ul]:list-disc [&>ul]:mb-4
+              [&>ol]:pl-6 [&>ol]:list-decimal [&>ol]:mb-4
+              [&>ul>li]:mb-1 [&>ol>li]:mb-1
+              [&_li]:text-slate-700
+
+              [&>blockquote]:border-l-4
+              [&>blockquote]:border-[#F97316]
+              [&>blockquote]:pl-4
+              [&>blockquote]:italic
+              [&>blockquote]:text-slate-600
+              [&>blockquote]:my-4
+
+              [&>table]:w-full
+              [&>table]:border-collapse
+              [&>table]:my-4
+              [&>table]:text-sm
+              [&>table]:bg-slate-50
+              [&>table]:rounded-lg
+              [&>table]:overflow-hidden
+
+              [&>table_th]:bg-slate-100
+              [&>table_th]:font-bold
+              [&>table_th]:border
+              [&>table_th]:border-slate-200
+              [&>table_th]:px-3
+              [&>table_th]:py-2
+
+              [&>table_td]:border
+              [&>table_td]:border-slate-200
+              [&>table_td]:px-3
+              [&>table_td]:py-2
+              [&>table_td]:align-top
+
+              [&>img]:max-w-full
+              [&>img]:h-auto
+              [&>img]:rounded-xl
+              [&>img]:my-5
+              [&>img]:mx-auto
+              [&>img]:shadow
+            "
             dangerouslySetInnerHTML={{ __html: article.html }}
           />
         </section>
