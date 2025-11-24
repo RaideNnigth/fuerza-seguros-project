@@ -14,7 +14,7 @@ export default function CotacaoSection() {
   const [active, setActive] = useState(null);
 
   return (
-    <section className="w-full bg-[#f2f2f2] py-12">
+    <section className="w-full py-12">
       <div className="max-w-4xl mx-auto px-4 space-y-6">
 
         {/* CARD DO SELETOR */}

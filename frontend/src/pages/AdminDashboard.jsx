@@ -25,34 +25,41 @@ function AdminDashboard() {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
+      
       {/* Sidebar para telas grandes */}
       <aside className="bg-gray-900 text-white w-60 flex-col p-6 hidden md:flex">
         <h2 className="text-lg font-bold mb-8 tracking-wider uppercase text-center">painel admin</h2>
+
         <button
           className={`mb-4 px-4 py-2 rounded w-full ${section === 'attachments' ? 'bg-gray-700' : 'hover:bg-gray-800'}`}
           onClick={() => setSection('attachments')}
         >
           gerenciar anexos
         </button>
+
         <button
           className={`mb-4 px-4 py-2 rounded w-full ${section === 'create' ? 'bg-gray-700' : 'hover:bg-gray-800'}`}
           onClick={() => setSection('create')}
         >
           criar artigo
         </button>
+
         <button
           className={`mb-4 px-4 py-2 rounded w-full ${section === 'manage' ? 'bg-gray-700' : 'hover:bg-gray-800'}`}
           onClick={() => setSection('manage')}
         >
           gerenciar artigos
         </button>
+
         <button
           className={`mb-4 px-4 py-2 rounded w-full ${section === 'order' ? 'bg-gray-700' : 'hover:bg-gray-800'}`}
           onClick={() => setSection('order')}
         >
           ordenar posts
         </button>
+
         <div className="flex-grow"></div>
+
         <button
           onClick={handleLogout}
           className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 mt-4 w-full"
@@ -61,7 +68,7 @@ function AdminDashboard() {
         </button>
       </aside>
 
-      {/* Sidebar para mobile (hamburger) */}
+      {/* Sidebar mobile */}
       <div className="md:hidden flex flex-col">
         <button
           className="m-4 p-2 rounded-full bg-gray-900 text-white self-start"
@@ -71,12 +78,14 @@ function AdminDashboard() {
             <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
+
         {sidebarOpen && (
           <div className="fixed inset-0 z-40 flex">
             <div
               className="fixed inset-0 bg-black bg-opacity-40"
               onClick={() => setSidebarOpen(false)}
             />
+
             <aside className="relative bg-gray-900 text-white w-60 flex-col p-6 h-full z-50 animate-slide-in-left">
               <button
                 className="absolute right-4 top-4 text-white"
@@ -87,20 +96,25 @@ function AdminDashboard() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
+
               <h2 className="text-lg font-bold mb-8 tracking-wider uppercase text-center">painel admin</h2>
+
               <button
                 className={`mb-4 px-4 py-2 rounded w-full ${section === 'attachments' ? 'bg-gray-700' : 'hover:bg-gray-800'}`}
                 onClick={() => { setSection('attachments'); setSidebarOpen(false); }}
               >
                 gerenciar anexos
               </button>
+
               <button
                 className={`mb-4 px-4 py-2 rounded w-full ${section === 'create' ? 'bg-gray-700' : 'hover:bg-gray-800'}`}
                 onClick={() => { setSection('create'); setSidebarOpen(false); }}
               >
                 criar artigo
               </button>
+
               <div className="flex-grow"></div>
+
               <button
                 onClick={handleLogout}
                 className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 mt-4 w-full"
@@ -112,16 +126,17 @@ function AdminDashboard() {
         )}
       </div>
 
-      {/* Conteúdo principal */}
-      <main className="flex-1 p-2 md:p-8">
+      {/* CONTEÚDO PRINCIPAL */}
+      {/* ======================================================= */}
+      {/* 👉 Aqui é a única alteração necessária! */}
+      <main className="flex-1 p-2 md:p-8 pt-28 md:pt-32">
         {section === 'attachments' && <AttachmentManager />}
         {section === 'create' && <CreateArticle />}
         {section === 'manage' && <ManagePosts />}
         {section === 'order' && <EditPostOrder />}
-        {/* Adicione mais módulos depois */}
       </main>
 
-      {/* Tailwind animation keyframes */}
+      {/* animação */}
       <style>
         {`
           @keyframes slide-in-left {

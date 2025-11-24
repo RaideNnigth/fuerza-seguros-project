@@ -3,7 +3,7 @@ import BlogCard from '../components/ui/BlogCard';
 import API_URL from '../config/api';
 
 import DEFAULT_THUMBNAIL from '../assets/images/default-thumbnail.png';
-import ConsorcioForm from '../components/ui/ConsorcioForm';
+import CotacaoSection from '../components/ui/CotacaoSection';
 
 
 
@@ -72,7 +72,7 @@ export default function Consorcios() {
         </p>
       </div>
       {/* Formulário direto */}
-      <ConsorcioForm />
+      <CotacaoSection />
     </section>
   );
 }

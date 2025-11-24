@@ -1,20 +1,32 @@
+/* tiptap.css */
+
+/* ✅ Base do editor com fonte padrão do site */
 .ProseMirror {
   min-height: 200px;
   outline: none;
-  font-family: 'Times New Roman', Times, serif !important;
+
+  /* troquei só isso aqui */
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif !important;
 }
 
 .ProseMirror:focus {
   border-color: #000d22;
 }
 
-/* tiptap.css */
-
+/* mantém suas configs */
 .ProseMirror {
   min-height: 220px;
   outline: none;
   font-size: 1rem;
   line-height: 1.7;
+}
+
+/* ✅ Headings no editor com Novecento (sem mexer em tamanho/margem) */
+.ProseMirror h1,
+.ProseMirror h2,
+.ProseMirror h3 {
+  font-family: 'Novecento', ui-sans-serif, system-ui !important;
 }
 
 .ProseMirror h1 {
@@ -23,12 +35,14 @@
   margin: 1.3em 0 0.7em 0;
   line-height: 1.1;
 }
+
 .ProseMirror h2 {
   font-size: 1.5rem;
   font-weight: 700;
   margin: 1.2em 0 0.7em 0;
   line-height: 1.2;
 }
+
 .ProseMirror h3 {
   font-size: 1.17rem;
   font-weight: 600;
@@ -57,17 +71,21 @@
   overflow: hidden;
   font-size: 0.95rem;
 }
-.ProseMirror th, .ProseMirror td {
+
+.ProseMirror th, 
+.ProseMirror td {
   border: 1px solid #e2e8f0;
   padding: 8px 12px;
   text-align: left;
 }
+
 .ProseMirror th {
   background: #f1f5f9;
   font-weight: bold;
 }
 
-.ProseMirror ul, .ProseMirror ol {
+.ProseMirror ul, 
+.ProseMirror ol {
   padding-left: 1.5em;
   margin-bottom: 1em;
 }

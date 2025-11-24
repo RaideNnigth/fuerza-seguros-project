@@ -31,6 +31,13 @@ export default function CreateArticle({ existingPost = null, onFinish }) {
   const editor = useEditor({
     extensions: [StarterKit, Image, Link, TextStyle, Color],
     content: '',
+    editorProps: {
+      attributes: {
+        // ✅ fonte padrão do site + espaçamento padrão
+        class:
+          'tiptap focus:outline-none p-3 min-h-[220px] font-sans text-slate-800 leading-relaxed text-base',
+      },
+    },
     onUpdate({ editor }) {
       setContent(editor.getHTML());
     },
@@ -69,7 +76,6 @@ export default function CreateArticle({ existingPost = null, onFinish }) {
     try {
       let coverId = existingPost?.cover || null;
 
-      // Faz upload da nova imagem se tiver uma nova selecionada
       if (cover instanceof File) {
         const formData = new FormData();
         formData.append('file', cover);
@@ -84,7 +90,7 @@ export default function CreateArticle({ existingPost = null, onFinish }) {
 
       const payload = {
         title,
-        author, // <-- Agora vindo do input
+        author,
         tags: selectedTags,
         htmlContent: content,
         cover: coverId,
@@ -136,7 +142,6 @@ export default function CreateArticle({ existingPost = null, onFinish }) {
       <form onSubmit={handleSubmit} className="flex flex-col gap-8 bg-white rounded-2xl shadow-2xl p-8 border border-blue-50">
         <h1 className="text-3xl font-extrabold text-blue-800 mb-2 tracking-tight">Criar Novo Artigo</h1>
 
-        {/* Título */}
         <input
           type="text"
           placeholder="Título do artigo"
@@ -146,7 +151,6 @@ export default function CreateArticle({ existingPost = null, onFinish }) {
           className="border border-gray-200 focus:border-blue-600 focus:ring-1 focus:ring-blue-300 p-3 rounded-xl font-semibold text-xl transition"
         />
 
-        {/* Autor */}
         <input
           type="text"
           placeholder="Nome do autor"
@@ -155,13 +159,11 @@ export default function CreateArticle({ existingPost = null, onFinish }) {
           className="border border-gray-200 focus:border-blue-600 focus:ring-1 focus:ring-blue-300 p-3 rounded-xl font-semibold text-xl transition"
         />
 
-        {/* Tags */}
         <div>
           <label className="block text-sm font-bold mb-1">Tags</label>
           <TagSelector selected={selectedTags} onChange={setSelectedTags} />
         </div>
 
-        {/* Capa */}
         <div className="flex flex-col sm:flex-row gap-8 items-start sm:items-center">
           <div className="flex flex-col items-center gap-3">
             {preview ? (
@@ -184,7 +186,6 @@ export default function CreateArticle({ existingPost = null, onFinish }) {
           </div>
         </div>
 
-        {/* Editor */}
         <div className="border-2 border-blue-100 rounded-2xl bg-white min-h-[250px] p-2 shadow-inner">
           <div className="flex justify-between items-center mb-2">
             <EditorToolbar editor={editor} onInsertImageFromAttachments={() => setShowImagePicker(true)} />
@@ -199,7 +200,8 @@ export default function CreateArticle({ existingPost = null, onFinish }) {
 
           {showHtml ? (
             <textarea
-              className="w-full h-60 p-2 border rounded-xl text-sm font-mono"
+              // ✅ textarea também com fonte padrão do site
+              className="w-full h-60 p-3 border rounded-xl text-sm font-mono bg-white"
               value={content}
               onChange={(e) => {
                 setContent(e.target.value);
@@ -211,7 +213,6 @@ export default function CreateArticle({ existingPost = null, onFinish }) {
           )}
         </div>
 
-        {/* Botão Publicar */}
         <button
           type="submit"
           disabled={loading}

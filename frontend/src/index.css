@@ -26,7 +26,6 @@
   font-display: swap;
 }
 
-
 body {
   @apply font-sans;
 }
@@ -62,7 +61,6 @@ svg.wave-animated path:nth-child(4) {
   }
 }
 
-
 @keyframes oceanWave {
   0% {
     d: path("M0,192 C220,100,440,100,660,192 C880,290,1100,290,1320,192 L1320 500 L0 500");
@@ -93,3 +91,27 @@ svg.wave-animated path:nth-child(4) {
   vertical-align: top;
 }
 
+
+/* ---------------------------------------------------
+   🔥 SWIPER CUSTOM STYLE (Tailwind @layer)
+   Estilo das setas e bullet igual ao layout enviado
+--------------------------------------------------- */
+@layer components {
+  .partners-swiper .swiper-button-next,
+  .partners-swiper .swiper-button-prev {
+    @apply text-slate-400 scale-75 transition-colors;
+  }
+
+  .partners-swiper .swiper-button-next:hover,
+  .partners-swiper .swiper-button-prev:hover {
+    @apply text-slate-500;
+  }
+
+  .partners-swiper .swiper-pagination-bullet {
+    @apply bg-slate-300 opacity-100;
+  }
+
+  .partners-swiper .swiper-pagination-bullet-active {
+    @apply bg-slate-700;
+  }
+}
