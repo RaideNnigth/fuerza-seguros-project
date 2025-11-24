@@ -26,7 +26,9 @@ export default function ConsorcioCarousel() {
 
         if (orderRes.ok) {
           const orderData = await orderRes.json();
-          orderedPostIds = Array.isArray(orderData.orderedPostIds) ? orderData.orderedPostIds : [];
+          orderedPostIds = Array.isArray(orderData.orderedPostIds)
+            ? orderData.orderedPostIds
+            : [];
         }
 
         const ordered = orderedPostIds
@@ -50,14 +52,18 @@ export default function ConsorcioCarousel() {
 
         const mapped = finalList.map(post => ({
           ...post,
-          image: post.cover ? `${API_URL}/api/attachments/${post.cover}` : DEFAULT_THUMBNAIL,
+          image: post.cover
+            ? `${API_URL}/api/attachments/${post.cover}`
+            : DEFAULT_THUMBNAIL,
           category: post.tags?.[0]?.toLowerCase() || 'blog',
           title: post.title || 'sem título',
           excerpt: post.htmlContent
             ? post.htmlContent.replace(/<[^>]+>/g, '').slice(0, 120) + '...'
             : '',
           author: post.author || 'Equipe Fuerza',
-          date: post.createdAt ? new Date(post.createdAt).toLocaleDateString('pt-BR') : '',
+          date: post.createdAt
+            ? new Date(post.createdAt).toLocaleDateString('pt-BR')
+            : '',
         }));
 
         setConsorcios(mapped);
@@ -73,28 +79,34 @@ export default function ConsorcioCarousel() {
     <section className="bg-white py-12">
       <div className="max-w-6xl mx-auto px-4">
 
+        {/* Título + texto adicional */}
         <div className="text-center mb-10">
           <p className="text-xs md:text-sm tracking-[0.25em] uppercase text-gray-400">
             Conheça alguns dos nossos
           </p>
+
           <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900">
             principais <span className="text-fuerza-laranja">produtos</span>
           </h2>
+
+          <p className="mt-3 text-gray-600 max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
+            Oferecemos serviços especializados nas mais diversas áreas de Seguros,
+            Consórcios, Financiamentos, Investimentos e Previdência Privada
+          </p>
         </div>
 
+        {/* Swiper */}
         <Swiper
           spaceBetween={20}
           slidesPerView={1}
           loop={true}
           speed={900}
-
           modules={[Autoplay]}
           autoplay={{
             delay: 1500,
             disableOnInteraction: false,
             pauseOnMouseEnter: true,
           }}
-
           breakpoints={{
             640: { slidesPerView: 1 },
             768: { slidesPerView: 2 },

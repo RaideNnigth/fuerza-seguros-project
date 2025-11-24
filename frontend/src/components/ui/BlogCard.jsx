@@ -70,15 +70,11 @@ export default function BlogCard({ post }) {
   return (
     <Link to={`/blog/${post._id}`} className="block h-full">
       <div
-        style={{
-          fontFamily: '"Times New Roman", Times, serif',
-          minHeight: "360px",
-          maxHeight: "360px",
-        }}
         className="
           bg-white rounded-lg shadow hover:shadow-lg
           transition-all duration-300 overflow-hidden cursor-pointer
           flex flex-col h-full
+          min-h-[360px] max-h-[360px]
         "
       >
         {/* Imagem padronizada */}
@@ -91,15 +87,12 @@ export default function BlogCard({ post }) {
           "
         />
 
-        <div
-          style={{ fontFamily: '"Times New Roman", Times, serif' }}
-          className="p-4 flex flex-col gap-2 flex-1"
-        >
+        <div className="p-4 flex flex-col gap-2 flex-1">
+
           {/* TAG com cor sólida dinâmica */}
           {category && (
             <span
               style={{
-                fontFamily: '"Times New Roman", Times, serif',
                 backgroundColor: getDynamicSolidColor(category),
               }}
               className="
@@ -113,7 +106,6 @@ export default function BlogCard({ post }) {
 
           {/* Título */}
           <h2
-            style={{ fontFamily: '"Times New Roman", Times, serif' }}
             className="
               text-lg font-semibold text-gray-800
               hover:text-blue-600 transition-colors duration-300
@@ -125,19 +117,12 @@ export default function BlogCard({ post }) {
 
           {/* Excerpt */}
           <div
-            className="text-sm text-gray-600 line-clamp-3"
-            style={{
-              fontFamily: '"Times New Roman", Times, serif',
-              minHeight: "55px",
-            }}
+            className="text-sm text-gray-600 line-clamp-3 min-h-[55px]"
             dangerouslySetInnerHTML={{ __html: post.excerpt }}
           />
 
           {/* Rodapé */}
-          <span
-            style={{ fontFamily: '"Times New Roman", Times, serif' }}
-            className="text-xs text-gray-400 mt-auto"
-          >
+          <span className="text-xs text-gray-400 mt-auto">
             {post.author} em {post.date}
           </span>
         </div>
