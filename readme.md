@@ -103,6 +103,65 @@ Certifique-se de ter os seguintes componentes instalados antes de continuar:
 
 6. **Servir o frontend com nginx ou `serve` se desejar.**
 
+## Deploy com Coolify (Docker Compose)
+
+Para subir as duas aplicaÃ§Ãµes no Coolify como **Docker Compose Application**, use o arquivo [`docker-compose.yml`](./docker-compose.yml) da raiz do projeto.
+
+### Arquitetura recomendada
+
+- `frontend`: serviÃ§o pÃºblico com domÃ­nio no Coolify
+- `backend`: serviÃ§o interno da stack, sem domÃ­nio pÃºblico
+
+O Nginx do `frontend` faz proxy de `/api` para `backend:3000`, entÃ£o o site e a API funcionam no mesmo domÃ­nio.
+
+Exemplo:
+
+- site: `https://fuerza.exemplo.com`
+- API: `https://fuerza.exemplo.com/api/...`
+
+### VariÃ¡veis obrigatÃ³rias no Coolify
+
+Defina estas variÃ¡veis no ambiente da aplicaÃ§Ã£o:
+
+```env
+MONGO_URI=
+JWT_SECRET=
+JWT_SECRET_REFRESH=
+EMAIL_USER=
+EMAIL_PASS=
+EMAIL_SERVICE=gmail
+EMAIL_FOR_LEAD=
+```
+
+### Como configurar no painel
+
+- atribua domÃ­nio apenas ao serviÃ§o `frontend`
+- nÃ£o exponha domÃ­nio para o `backend`
+
+### ObservaÃ§Ãµes
+
+- o `backend` roda em modo `production`, portanto usa HTTP normal dentro do container
+- o `frontend` chama a API usando caminho relativo `/api`, sem depender de `VITE_API_URL` em produÃ§Ã£o
+
+### Teste local com Docker
+
+Para testar localmente antes de subir no Coolify, use o compose principal junto com o override local:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.local.yml up --build
+```
+
+Isso publica:
+
+- `http://localhost` para o frontend
+- `http://localhost:3000` para o backend
+
+Para parar:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.local.yml down
+```
+
 ## Suporte a HTTPS (opcional)
 
 Coloque `cert.pem` e `key.pem` nas pastas:
