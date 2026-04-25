@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import API_URL from '../../config/api';
+import { optimizedAttachmentUrl } from '../../utils/attachmentUrls';
 
 export default function ImageAttachmentPicker({ open, onClose, onSelect }) {
   const [attachments, setAttachments] = useState([]);
@@ -30,11 +31,9 @@ export default function ImageAttachmentPicker({ open, onClose, onSelect }) {
             {attachments.map(att => (
               <img
                 key={att._id}
-                src={att.base64 || `${API_URL}/api/attachments/${att._id}`}
+                src={optimizedAttachmentUrl(att._id, { width: 240, quality: 65 })}
                 alt={att.filename}
                 title={att.filename}
-                loading="lazy"
-                decoding="async"
                 className="w-24 h-24 object-cover rounded border cursor-pointer hover:ring-2 ring-blue-500"
                 onClick={() => onSelect(att)}
               />

@@ -81,8 +81,6 @@ export default function BlogCard({ post }) {
         <img
           src={post.image}
           alt={post.title}
-          loading="lazy"
-          decoding="async"
           draggable="false"
           className="
             w-full h-[160px] object-cover select-none

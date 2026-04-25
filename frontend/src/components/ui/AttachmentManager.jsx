@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import API_URL from '../../config/api';
+import { attachmentUrl, optimizedAttachmentUrl } from '../../utils/attachmentUrls';
 
 export default function AttachmentManager() {
   const [attachments, setAttachments] = useState([]);
@@ -108,7 +109,6 @@ export default function AttachmentManager() {
             <img
               src={preview}
               alt="pré-visualização"
-              decoding="async"
               className="w-28 h-28 object-cover rounded-lg border"
             />
           ) : (
@@ -175,13 +175,11 @@ export default function AttachmentManager() {
         {attachments.map(att => (
           <li key={att._id} className="bg-white flex flex-col md:flex-row md:items-center gap-2 rounded-lg shadow p-3">
             <div className="flex-shrink-0">
-              {isImage(att) && (att.base64 || att._id) ? (
-                <a href={`${API_URL}/api/attachments/${att._id}`} target="_blank" rel="noopener noreferrer">
+              {isImage(att) && att._id ? (
+                <a href={attachmentUrl(att._id)} target="_blank" rel="noopener noreferrer">
                   <img
-                    src={att.base64 ? att.base64 : `${API_URL}/api/attachments/${att._id}`}
+                    src={optimizedAttachmentUrl(att._id, { width: 160, quality: 60 })}
                     alt={att.filename?.toLowerCase()}
-                    loading="lazy"
-                    decoding="async"
                     className="w-16 h-16 object-cover rounded border"
                   />
                 </a>
@@ -193,7 +191,7 @@ export default function AttachmentManager() {
             </div>
             <div className="flex-1 flex flex-col items-start">
               <a
-                href={`${API_URL}/api/attachments/${att._id}`}
+                href={attachmentUrl(att._id)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-semibold text-gray-800 hover:underline break-all"
@@ -208,7 +206,7 @@ export default function AttachmentManager() {
                   deletar
                 </button>
                 <a
-                  href={`${API_URL}/api/attachments/${att._id}`}
+                  href={attachmentUrl(att._id)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-3 py-1 rounded bg-green-600 text-white text-sm hover:bg-green-700 transition"

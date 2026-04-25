@@ -5,6 +5,7 @@ import 'swiper/css';
 import BlogCard from './BlogCard';
 import API_URL from '../../config/api';
 import DEFAULT_THUMBNAIL from '../../assets/images/default-thumbnail.png';
+import { optimizedAttachmentUrl } from '../../utils/attachmentUrls';
 
 export default function ConsorcioCarousel() {
   const [consorcios, setConsorcios] = useState([]);
@@ -53,7 +54,7 @@ export default function ConsorcioCarousel() {
         const mapped = finalList.map(post => ({
           ...post,
           image: post.cover
-            ? `${API_URL}/api/attachments/${post.cover}`
+            ? optimizedAttachmentUrl(post.cover, { width: 640, quality: 70 })
             : DEFAULT_THUMBNAIL,
           category: post.tags?.[0]?.toLowerCase() || 'blog',
           title: post.title || 'sem título',
@@ -105,7 +106,6 @@ export default function ConsorcioCarousel() {
           threshold={6}
           preventClicks
           preventClicksPropagation
-          lazyPreloadPrevNext={2}
           modules={[Autoplay]}
           autoplay={{
             delay: 1500,

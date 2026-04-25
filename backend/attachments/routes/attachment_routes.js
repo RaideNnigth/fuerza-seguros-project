@@ -11,6 +11,7 @@ router.post('/', verifyToken, upload.single('file'), controller.uploadAttachment
 router.get('/page/:index', controller.getAttachmentsPaginated);
 
 // Download
+router.get('/:id/optimized', controller.getOptimizedImage);
 router.get('/:id', controller.getAttachment);
 
 // Download by filename

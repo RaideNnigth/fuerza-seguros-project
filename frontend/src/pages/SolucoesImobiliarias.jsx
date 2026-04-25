@@ -3,6 +3,7 @@ import BlogCard from "../components/ui/BlogCard";
 import API_URL from "../config/api";
 import DEFAULT_THUMBNAIL from "../assets/images/default-thumbnail.png";
 import CotacaoSection from "../components/ui/CotacaoSection";
+import { optimizedAttachmentUrl } from "../utils/attachmentUrls";
 
 export default function SolucoesImobiliarias() {
   const [posts, setPosts] = useState([]);
@@ -63,7 +64,7 @@ export default function SolucoesImobiliarias() {
         const mapped = finalList.map((post) => ({
           _id: post._id,
           image: post.cover
-            ? `${API_URL}/api/attachments/${post.cover}`
+            ? optimizedAttachmentUrl(post.cover, { width: 640, quality: 70 })
             : DEFAULT_THUMBNAIL,
           category: post.tags?.[0] || "solução imobiliária",
           title: post.title || "Sem título",

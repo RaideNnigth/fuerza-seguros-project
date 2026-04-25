@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import BlogCard from "../components/ui/BlogCard";
 import API_URL from "../config/api";
 import DEFAULT_THUMBNAIL from "../assets/images/default-thumbnail.png";
+import { optimizedAttachmentUrl } from "../utils/attachmentUrls";
 
 export default function Blog() {
   const [posts, setPosts] = useState([]);
@@ -24,7 +25,7 @@ export default function Blog() {
           .map((post) => ({
             ...post,
             image: post.cover
-              ? `${API_URL}/api/attachments/${post.cover}`
+              ? optimizedAttachmentUrl(post.cover, { width: 640, quality: 70 })
               : DEFAULT_THUMBNAIL,
             category: post.tags?.[0]?.toLowerCase() || "blog",
             title: post.title || "Sem título",

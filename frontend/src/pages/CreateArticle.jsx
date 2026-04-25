@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API_URL from '../config/api';
+import { optimizedAttachmentUrl } from '../utils/attachmentUrls';
 
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -62,7 +63,7 @@ export default function CreateArticle({ existingPost = null, onFinish }) {
   function handleInsertImageFromAttachments(att) {
     if (editor) {
       editor.commands.insertContent(
-        `<img src="${API_URL}/api/attachments/${att._id}" alt="${att.filename}" loading="lazy" decoding="async" style="max-width:100%" />`
+        `<img src="${optimizedAttachmentUrl(att._id, { width: 1200, quality: 75 })}" alt="${att.filename}" style="max-width:100%" />`
       );
     }
     setShowImagePicker(false);
@@ -133,7 +134,7 @@ export default function CreateArticle({ existingPost = null, onFinish }) {
       setSelectedTags(existingPost.tags || []);
       setContent(existingPost.htmlContent || '');
       editor?.commands.setContent(existingPost.htmlContent || '');
-      setPreview(existingPost.cover ? `${API_URL}/api/attachments/${existingPost.cover}` : null);
+      setPreview(existingPost.cover ? optimizedAttachmentUrl(existingPost.cover, { width: 320, quality: 70 }) : null);
     }
   }, [existingPost, editor]);
 
@@ -167,7 +168,7 @@ export default function CreateArticle({ existingPost = null, onFinish }) {
         <div className="flex flex-col sm:flex-row gap-8 items-start sm:items-center">
           <div className="flex flex-col items-center gap-3">
             {preview ? (
-              <img src={preview} alt="Capa" decoding="async" className="w-32 h-32 object-cover rounded-xl border-2 border-blue-200 shadow-sm" />
+              <img src={preview} alt="Capa" className="w-32 h-32 object-cover rounded-xl border-2 border-blue-200 shadow-sm" />
             ) : (
               <div className="w-32 h-32 flex items-center justify-center rounded-xl border-2 border-gray-200 bg-gray-100 text-gray-400 text-xs">
                 Sem capa

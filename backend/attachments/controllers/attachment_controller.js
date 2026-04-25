@@ -1,4 +1,15 @@
 const Attachment = require('../models/Attachment');
+const sharp = require('sharp');
+
+const DEFAULT_IMAGE_WIDTH = 900;
+const DEFAULT_IMAGE_QUALITY = 72;
+const MAX_IMAGE_WIDTH = 1600;
+
+function clampNumber(value, fallback, min, max) {
+  const parsed = Number.parseInt(value, 10);
+  if (Number.isNaN(parsed)) return fallback;
+  return Math.min(Math.max(parsed, min), max);
+}
 
 exports.uploadAttachment = async (req, res) => {
   try {
@@ -40,8 +51,7 @@ exports.getAttachmentsPaginated = async (req, res) => {
           _id: 1,
           filename: 1,
           mimetype: 1,
-          uploadedAt: 1,
-          data: 1
+          uploadedAt: 1
         }
       }
     ], { allowDiskUse: true }).toArray();
@@ -50,10 +60,7 @@ exports.getAttachmentsPaginated = async (req, res) => {
       _id: a._id,
       filename: a.filename,
       mimetype: a.mimetype,
-      uploadedAt: a.uploadedAt,
-      base64: a.data?.buffer
-        ? `data:${a.mimetype};base64,${a.data.buffer.toString('base64')}`
-        : null
+      uploadedAt: a.uploadedAt
     }));
 
     res.json({
@@ -103,8 +110,7 @@ exports.getAttachmentsByFilename = async (req, res) => {
       _id: a._id,
       filename: a.filename,
       mimetype: a.mimetype,
-      uploadedAt: a.uploadedAt,
-      base64: `data:${a.mimetype};base64,${a.data.toString('base64')}`
+      uploadedAt: a.uploadedAt
     }));
 
     res.json(response);
@@ -122,6 +128,39 @@ exports.getAttachment = async (req, res) => {
     res.send(attachment.data);
   } catch (err) {
     res.status(500).json({ message: 'Erro ao buscar anexo' });
+  }
+};
+
+exports.getOptimizedImage = async (req, res) => {
+  try {
+    const attachment = await Attachment.findById(req.params.id);
+    if (!attachment) return res.status(404).send('Arquivo nÃ£o encontrado');
+
+    if (!attachment.mimetype?.startsWith('image/')) {
+      res.set('Content-Type', attachment.mimetype);
+      return res.send(attachment.data);
+    }
+
+    const width = clampNumber(req.query.w, DEFAULT_IMAGE_WIDTH, 80, MAX_IMAGE_WIDTH);
+    const quality = clampNumber(req.query.q, DEFAULT_IMAGE_QUALITY, 40, 90);
+
+    const optimized = await sharp(attachment.data)
+      .rotate()
+      .resize({
+        width,
+        withoutEnlargement: true,
+      })
+      .webp({ quality })
+      .toBuffer();
+
+    res.set({
+      'Content-Type': 'image/webp',
+      'Cache-Control': 'public, max-age=31536000, immutable',
+    });
+    res.send(optimized);
+  } catch (err) {
+    console.error('Erro ao otimizar imagem:', err);
+    res.status(500).json({ message: 'Erro ao otimizar imagem' });
   }
 };
 

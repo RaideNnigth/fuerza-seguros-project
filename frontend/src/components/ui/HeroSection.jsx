@@ -40,9 +40,6 @@ export default function HeroSection() {
             <img
               src={banner_img}
               alt="Família no sofá"
-              loading="eager"
-              fetchPriority="high"
-              decoding="async"
               className="rounded-xl w-[260px] h-[190px] md:w-[520px] md:h-[320px] object-cover"
             />
           </div>

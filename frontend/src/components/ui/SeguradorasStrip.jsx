@@ -45,7 +45,6 @@ export default function SeguradorasStrip() {
           threshold={6}
           preventClicks
           preventClicksPropagation
-          lazyPreloadPrevNext={2}
           slidesPerView={2}
           spaceBetween={20}
           navigation
@@ -68,8 +67,6 @@ export default function SeguradorasStrip() {
                 <img
                   src={logo.src}
                   alt="logo"
-                  loading="lazy"
-                  decoding="async"
                   draggable="false"
                   className="h-14 w-auto object-contain select-none"
                 />

@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import API_URL from "../../config/api";
 import DEFAULT_THUMBNAIL from "../../assets/images/default-thumbnail.png";
+import { optimizedAttachmentUrl } from "../../utils/attachmentUrls";
 
 export default function SegurosHomeSection({ onGoToCotacao }) {
   const [seguros, setSeguros] = useState([]);
@@ -56,7 +57,7 @@ export default function SegurosHomeSection({ onGoToCotacao }) {
         const mapped = finalList.map((post) => ({
           ...post,
           image: post.cover
-            ? `${API_URL}/api/attachments/${post.cover}`
+            ? optimizedAttachmentUrl(post.cover, { width: 900, quality: 72 })
             : DEFAULT_THUMBNAIL,
           category: post.tags?.[0]?.toLowerCase() || "blog",
           title: post.title || "sem título",
@@ -134,8 +135,6 @@ export default function SegurosHomeSection({ onGoToCotacao }) {
                     <img
                       src={post.image}
                       alt={post.title}
-                      loading="lazy"
-                      decoding="async"
                       className="w-full h-[220px] md:h-[260px] object-cover"
                     />
                   </div>

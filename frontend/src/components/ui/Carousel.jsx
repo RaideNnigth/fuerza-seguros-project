@@ -11,8 +11,6 @@ export default function Carousel({ images }) {
           <img
             src={src}
             alt=""
-            loading={i === 0 ? "eager" : "lazy"}
-            decoding="async"
             draggable="false"
             className="w-full object-cover select-none"
           />
