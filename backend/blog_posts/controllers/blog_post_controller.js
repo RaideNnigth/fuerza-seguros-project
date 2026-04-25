@@ -56,7 +56,7 @@ exports.getPostById = async (req, res) => {
       req.params.id,
       { $inc: { views: 1 } },
       { new: true }
-    ).populate('cover'); // ← aqui
+    );
 
     if (!post) return res.status(404).json({ message: 'Post não encontrado' });
     res.json(post);
@@ -68,7 +68,9 @@ exports.getPostById = async (req, res) => {
 exports.getPostsByTag = async (req, res) => {
   try {
     const tag = req.params.tag.toLowerCase();
-    const posts = await BlogPost.find({ tags: tag });
+    const posts = await BlogPost.find({ tags: tag })
+      .select('title htmlContent tags createdAt author active')
+      .sort({ createdAt: -1 });
     res.json(posts);
   } catch (err) {
     res.status(500).json({ message: 'Erro ao buscar posts por tag' });

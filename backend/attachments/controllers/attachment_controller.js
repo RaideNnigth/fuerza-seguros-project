@@ -144,20 +144,29 @@ exports.getOptimizedImage = async (req, res) => {
     const width = clampNumber(req.query.w, DEFAULT_IMAGE_WIDTH, 80, MAX_IMAGE_WIDTH);
     const quality = clampNumber(req.query.q, DEFAULT_IMAGE_QUALITY, 40, 90);
 
-    const optimized = await sharp(attachment.data)
-      .rotate()
-      .resize({
-        width,
-        withoutEnlargement: true,
-      })
-      .webp({ quality })
-      .toBuffer();
+    try {
+      const optimized = await sharp(attachment.data)
+        .rotate()
+        .resize({
+          width,
+          withoutEnlargement: true,
+        })
+        .webp({ quality })
+        .toBuffer();
 
-    res.set({
-      'Content-Type': 'image/webp',
-      'Cache-Control': 'public, max-age=31536000, immutable',
-    });
-    res.send(optimized);
+      res.set({
+        'Content-Type': 'image/webp',
+        'Cache-Control': 'public, max-age=31536000, immutable',
+      });
+      return res.send(optimized);
+    } catch (optimizationErr) {
+      console.error('Falha ao otimizar imagem, enviando original:', optimizationErr);
+      res.set({
+        'Content-Type': attachment.mimetype,
+        'Cache-Control': 'public, max-age=86400',
+      });
+      return res.send(attachment.data);
+    }
   } catch (err) {
     console.error('Erro ao otimizar imagem:', err);
     res.status(500).json({ message: 'Erro ao otimizar imagem' });
