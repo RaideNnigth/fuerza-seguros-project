@@ -127,6 +127,7 @@ Defina estas variaveis no ambiente da aplicacao:
 
 ```env
 MONGO_URI=
+MONGO_DB_NAME=fuerzaseguros
 JWT_SECRET=
 JWT_SECRET_REFRESH=
 EMAIL_USER=
@@ -140,6 +141,7 @@ EMAIL_FOR_LEAD=
 - o `backend` roda em modo `production`, portanto usa HTTP normal dentro do container
 - o `frontend` chama a API usando caminho relativo `/api`, sem depender de `VITE_API_URL` em producao
 - o banco MongoDB deve estar em um servico externo ou em outro recurso configurado no Coolify, e a conexao deve ir em `MONGO_URI`
+- se `MONGO_URI` nao incluir o nome do banco, `MONGO_DB_NAME` define o banco usado; por padrao a API usa `fuerzaseguros`
 
 ### Teste local com Docker
 

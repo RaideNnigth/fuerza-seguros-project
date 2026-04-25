@@ -49,7 +49,9 @@ app.use('/api/email', emailRoutes);
 const tagRoutes = require('./tags');
 app.use('/api/tags', tagRoutes);
 
-mongoose.connect(process.env.MONGO_URI)
+const mongoDbName = process.env.MONGO_DB_NAME || 'fuerzaseguros';
+
+mongoose.connect(process.env.MONGO_URI, { dbName: mongoDbName })
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error(err));
 
