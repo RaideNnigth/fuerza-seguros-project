@@ -13,7 +13,8 @@ export default function Carousel({ images }) {
             alt=""
             loading={i === 0 ? "eager" : "lazy"}
             decoding="async"
-            className="w-full object-cover"
+            draggable="false"
+            className="w-full object-cover select-none"
           />
         </div>
       ))}

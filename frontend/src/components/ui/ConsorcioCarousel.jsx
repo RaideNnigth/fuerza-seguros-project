@@ -101,11 +101,17 @@ export default function ConsorcioCarousel() {
           slidesPerView={1}
           loop={true}
           speed={900}
+          grabCursor
+          threshold={6}
+          preventClicks
+          preventClicksPropagation
+          lazyPreloadPrevNext={2}
           modules={[Autoplay]}
           autoplay={{
             delay: 1500,
-            disableOnInteraction: false,
+            disableOnInteraction: true,
             pauseOnMouseEnter: true,
+            waitForTransition: true,
           }}
           breakpoints={{
             640: { slidesPerView: 1 },
@@ -116,7 +122,7 @@ export default function ConsorcioCarousel() {
           className="pb-2"
         >
           {consorcios.map((post) => (
-            <SwiperSlide key={post._id} className="h-auto">
+            <SwiperSlide key={post._id} className="h-auto select-none">
               <BlogCard post={post} />
             </SwiperSlide>
           ))}

@@ -34,8 +34,18 @@ export default function SeguradorasStrip() {
 
         <Swiper
           modules={[Autoplay, Navigation, Pagination]}
-          autoplay={{ delay: 2000, disableOnInteraction: false }}
+          autoplay={{
+            delay: 2000,
+            disableOnInteraction: true,
+            pauseOnMouseEnter: true,
+            waitForTransition: true,
+          }}
           loop
+          grabCursor
+          threshold={6}
+          preventClicks
+          preventClicksPropagation
+          lazyPreloadPrevNext={2}
           slidesPerView={2}
           spaceBetween={20}
           navigation
@@ -47,7 +57,7 @@ export default function SeguradorasStrip() {
           }}
           className="partners-swiper pb-10"
         >
-          {logos.concat(logos).map((logo, index) => (
+          {logos.map((logo, index) => (
             <SwiperSlide key={index}>
               <a
                 href={logo.link}
@@ -60,7 +70,8 @@ export default function SeguradorasStrip() {
                   alt="logo"
                   loading="lazy"
                   decoding="async"
-                  className="h-14 w-auto object-contain"
+                  draggable="false"
+                  className="h-14 w-auto object-contain select-none"
                 />
               </a>
             </SwiperSlide>

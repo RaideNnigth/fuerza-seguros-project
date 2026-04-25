@@ -83,8 +83,9 @@ export default function BlogCard({ post }) {
           alt={post.title}
           loading="lazy"
           decoding="async"
+          draggable="false"
           className="
-            w-full h-[160px] object-cover
+            w-full h-[160px] object-cover select-none
             hover:scale-105 transition-transform duration-300
           "
         />
