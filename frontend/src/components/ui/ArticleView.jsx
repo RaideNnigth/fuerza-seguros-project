@@ -5,6 +5,7 @@ import API_URL from "../../config/api";
 import Carousel from "./Carousel";
 import RelatedPosts from "./RelatedPosts";
 import CotacaoSection from "./CotacaoSection";
+import { addLazyLoadingToHtml } from "../../utils/lazyImages";
 
 export default function ArticleView() {
   const { slug } = useParams();
@@ -20,7 +21,7 @@ export default function ArticleView() {
         setArticle({
           _id: data._id,
           title: data.title,
-          html: data.htmlContent,
+          html: addLazyLoadingToHtml(data.htmlContent),
           category: data.tags?.[0] || "Blog",
           date: new Date(data.createdAt).toLocaleDateString("pt-BR"),
           author: data.author || "Equipe Fuerza",

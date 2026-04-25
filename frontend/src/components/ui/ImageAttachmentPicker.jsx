@@ -33,6 +33,8 @@ export default function ImageAttachmentPicker({ open, onClose, onSelect }) {
                 src={att.base64 || `${API_URL}/api/attachments/${att._id}`}
                 alt={att.filename}
                 title={att.filename}
+                loading="lazy"
+                decoding="async"
                 className="w-24 h-24 object-cover rounded border cursor-pointer hover:ring-2 ring-blue-500"
                 onClick={() => onSelect(att)}
               />

@@ -62,7 +62,7 @@ export default function CreateArticle({ existingPost = null, onFinish }) {
   function handleInsertImageFromAttachments(att) {
     if (editor) {
       editor.commands.insertContent(
-        `<img src="${API_URL}/api/attachments/${att._id}" alt="${att.filename}" style="max-width:100%" />`
+        `<img src="${API_URL}/api/attachments/${att._id}" alt="${att.filename}" loading="lazy" decoding="async" style="max-width:100%" />`
       );
     }
     setShowImagePicker(false);
@@ -167,7 +167,7 @@ export default function CreateArticle({ existingPost = null, onFinish }) {
         <div className="flex flex-col sm:flex-row gap-8 items-start sm:items-center">
           <div className="flex flex-col items-center gap-3">
             {preview ? (
-              <img src={preview} alt="Capa" className="w-32 h-32 object-cover rounded-xl border-2 border-blue-200 shadow-sm" />
+              <img src={preview} alt="Capa" decoding="async" className="w-32 h-32 object-cover rounded-xl border-2 border-blue-200 shadow-sm" />
             ) : (
               <div className="w-32 h-32 flex items-center justify-center rounded-xl border-2 border-gray-200 bg-gray-100 text-gray-400 text-xs">
                 Sem capa

@@ -8,7 +8,13 @@ export default function Carousel({ images }) {
     <div ref={sliderRef} className="keen-slider my-6 rounded-lg overflow-hidden">
       {images.map((src, i) => (
         <div key={i} className="keen-slider__slide">
-          <img src={src} className="w-full object-cover" />
+          <img
+            src={src}
+            alt=""
+            loading={i === 0 ? "eager" : "lazy"}
+            decoding="async"
+            className="w-full object-cover"
+          />
         </div>
       ))}
     </div>

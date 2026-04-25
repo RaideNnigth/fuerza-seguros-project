@@ -81,6 +81,8 @@ export default function BlogCard({ post }) {
         <img
           src={post.image}
           alt={post.title}
+          loading="lazy"
+          decoding="async"
           className="
             w-full h-[160px] object-cover
             hover:scale-105 transition-transform duration-300

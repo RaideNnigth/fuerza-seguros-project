@@ -19,6 +19,8 @@ export default function About() {
         <img
           src={aboutImage}
           alt="Sobre a Fuerza"
+          loading="lazy"
+          decoding="async"
           className="rounded-xl shadow-md w-full max-w-md object-contain transform transition-transform duration-500 hover:scale-105"
         />
       </div>

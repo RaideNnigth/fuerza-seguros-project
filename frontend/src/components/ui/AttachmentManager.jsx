@@ -108,6 +108,7 @@ export default function AttachmentManager() {
             <img
               src={preview}
               alt="pré-visualização"
+              decoding="async"
               className="w-28 h-28 object-cover rounded-lg border"
             />
           ) : (
@@ -179,6 +180,8 @@ export default function AttachmentManager() {
                   <img
                     src={att.base64 ? att.base64 : `${API_URL}/api/attachments/${att._id}`}
                     alt={att.filename?.toLowerCase()}
+                    loading="lazy"
+                    decoding="async"
                     className="w-16 h-16 object-cover rounded border"
                   />
                 </a>

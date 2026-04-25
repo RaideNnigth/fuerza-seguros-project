@@ -19,6 +19,8 @@ export default function Navbar() {
           <img
             src={Logo}
             alt="Logo Fuerza Seguros"
+            loading="eager"
+            decoding="async"
             className="w-8 transition-transform group-hover:scale-110"
           />
           <span className="font-semibold text-white tracking-wide text-lg">

@@ -58,6 +58,8 @@ export default function SeguradorasStrip() {
                 <img
                   src={logo.src}
                   alt="logo"
+                  loading="lazy"
+                  decoding="async"
                   className="h-14 w-auto object-contain"
                 />
               </a>

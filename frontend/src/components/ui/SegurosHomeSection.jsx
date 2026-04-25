@@ -134,6 +134,8 @@ export default function SegurosHomeSection({ onGoToCotacao }) {
                     <img
                       src={post.image}
                       alt={post.title}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-[220px] md:h-[260px] object-cover"
                     />
                   </div>
