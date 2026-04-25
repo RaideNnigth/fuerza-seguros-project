@@ -31,8 +31,8 @@ COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 ENV NODE_ENV=production
-ENV PORT=3000
+ENV API_PORT=3001
 
-EXPOSE 80
+EXPOSE 80 3000
 
 CMD ["docker-entrypoint.sh"]

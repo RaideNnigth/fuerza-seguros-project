@@ -57,7 +57,7 @@ app.get('/', (req, res) => {
   res.send('Fuerza Seguros API Running!');
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.API_PORT || process.env.PORT || 3000;
 
 if (process.env.NODE_ENV === 'production') {
   // Em produção (Railway), usa HTTP normal

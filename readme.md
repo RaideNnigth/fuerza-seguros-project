@@ -103,25 +103,27 @@ Certifique-se de ter os seguintes componentes instalados antes de continuar:
 
 6. **Servir o frontend com nginx ou `serve` se desejar.**
 
-## Deploy com Coolify (Docker Compose)
+## Deploy com Coolify (Dockerfile)
 
-Para subir as duas aplicaÃ§Ãµes no Coolify como **Docker Compose Application**, use o arquivo [`docker-compose.yml`](./docker-compose.yml) da raiz do projeto.
+Para subir o projeto no Coolify, use o `Dockerfile` da raiz como **Dockerfile Application**.
 
-### Arquitetura recomendada
+### Configuracao no Coolify
 
-- `frontend`: serviÃ§o pÃºblico com domÃ­nio no Coolify
-- `backend`: serviÃ§o interno da stack, sem domÃ­nio pÃºblico
+- Build Pack: `Dockerfile`
+- Dockerfile: `./Dockerfile`
+- Porta exposta: `80` ou `3000`
+- Dominio: aponte para a aplicacao criada no Coolify
 
-O Nginx do `frontend` faz proxy de `/api` para `backend:3000`, entÃ£o o site e a API funcionam no mesmo domÃ­nio.
+O container roda o backend Node internamente na porta `3001` e o Nginx publica o frontend nas portas `80` e `3000`. O Nginx tambem faz proxy de `/api` para o backend, entao site e API funcionam no mesmo dominio.
 
 Exemplo:
 
 - site: `https://fuerza.exemplo.com`
 - API: `https://fuerza.exemplo.com/api/...`
 
-### VariÃ¡veis obrigatÃ³rias no Coolify
+### Variaveis obrigatorias no Coolify
 
-Defina estas variÃ¡veis no ambiente da aplicaÃ§Ã£o:
+Defina estas variaveis no ambiente da aplicacao:
 
 ```env
 MONGO_URI=
@@ -133,34 +135,22 @@ EMAIL_SERVICE=gmail
 EMAIL_FOR_LEAD=
 ```
 
-### Como configurar no painel
-
-- atribua domÃ­nio apenas ao serviÃ§o `frontend`
-- nÃ£o exponha domÃ­nio para o `backend`
-
-### ObservaÃ§Ãµes
+### Observacoes
 
 - o `backend` roda em modo `production`, portanto usa HTTP normal dentro do container
-- o `frontend` chama a API usando caminho relativo `/api`, sem depender de `VITE_API_URL` em produÃ§Ã£o
+- o `frontend` chama a API usando caminho relativo `/api`, sem depender de `VITE_API_URL` em producao
+- o banco MongoDB deve estar em um servico externo ou em outro recurso configurado no Coolify, e a conexao deve ir em `MONGO_URI`
 
 ### Teste local com Docker
 
-Para testar localmente antes de subir no Coolify, use o compose principal junto com o override local:
+Para testar localmente antes de subir no Coolify:
 
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.local.yml up --build
+docker build -t fuerza-seguros-coolify .
+docker run --rm -p 8080:80 --env-file backend/.env fuerza-seguros-coolify
 ```
 
-Isso publica:
-
-- `http://localhost` para o frontend
-- `http://localhost:3000` para o backend
-
-Para parar:
-
-```bash
-docker compose -f docker-compose.yml -f docker-compose.local.yml down
-```
+Depois acesse `http://localhost:8080`.
 
 ## Suporte a HTTPS (opcional)
 
