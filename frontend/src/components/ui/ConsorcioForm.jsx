@@ -27,13 +27,29 @@ export default function ConsorcioForm({ title = "Orce seu consórcio" }) {
 
   const inputClass =
     "w-full h-12 px-4 rounded-lg bg-[#cfe9ff] outline-none focus:ring-2 focus:ring-blue-500";
+  const moneyInputWrapperClass =
+    "w-full h-12 rounded-lg bg-[#cfe9ff] flex items-center focus-within:ring-2 focus-within:ring-blue-500";
+  const moneyInputClass =
+    "w-full h-full px-3 rounded-r-lg bg-transparent outline-none";
   const labelClass = "text-sm font-semibold text-gray-800";
 
   const isEmailValid = (email) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const isPhoneValid = (phone) =>
     phone.replace(/\D/g, "").length >= 10;
-  const isValueValid = (v) => v && Number(v) > 0;
+  const parseCurrencyValue = (value) => {
+    if (!value) return NaN;
+    return Number(
+      value.replace(/\s/g, "").replace(/\./g, "").replace(",", ".")
+    );
+  };
+  const isValueValid = (v) =>
+    Number.isFinite(parseCurrencyValue(v)) && parseCurrencyValue(v) > 0;
+  const formatCurrencyForMessage = (value) =>
+    parseCurrencyValue(value).toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
 
   const handleChange = (e) => {
     setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
@@ -68,7 +84,7 @@ export default function ConsorcioForm({ title = "Orce seu consórcio" }) {
           subject: `Lead Consórcio - ${form.tipoConsorcio} - ${form.nome}`,
           text:
             `Produto: ${form.tipoConsorcio}\n` +
-            `Valor de crédito: ${form.valorInvestimento}\n` +
+            `Valor de crédito: ${formatCurrencyForMessage(form.valorInvestimento)}\n` +
             `Nome: ${form.nome}\n` +
             `Telefone: ${form.telefone}\n` +
             `E-mail: ${form.email}\n` +
@@ -123,16 +139,21 @@ export default function ConsorcioForm({ title = "Orce seu consórcio" }) {
 
       <div>
         <label className={labelClass}>Insira o valor de crédito que deseja</label>
-        <input
-          name="valorInvestimento"
-          type="number"
-          min="0"
-          step="any"
-          value={form.valorInvestimento}
-          onChange={handleChange}
-          required
-          className={inputClass}
-        />
+        <div className={moneyInputWrapperClass}>
+          <span className="px-4 text-sm font-semibold text-gray-700 border-r border-blue-200">
+            R$
+          </span>
+          <input
+            name="valorInvestimento"
+            type="text"
+            inputMode="decimal"
+            placeholder="Ex: 250.000,00"
+            value={form.valorInvestimento}
+            onChange={handleChange}
+            required
+            className={moneyInputClass}
+          />
+        </div>
       </div>
 
       <div>
