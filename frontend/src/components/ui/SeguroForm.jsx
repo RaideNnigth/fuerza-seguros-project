@@ -1,5 +1,11 @@
 import { useState } from "react";
 import API_URL from "../../config/api";
+import {
+  formatEmailInput,
+  formatPhoneInput,
+  isEmailValid,
+  isPhoneValid,
+} from "../../utils/formFormatters";
 
 const initialForm = {
   produto: "",
@@ -24,7 +30,7 @@ const BEST_TIME_OPTIONS = [
   "Qualquer horário",
 ];
 
-export default function SeguroForm({ title = "Orce seu seguro" }) {
+export default function SeguroForm({ title = "Orce seu seguro", showHeader = true }) {
   const [form, setForm] = useState(initialForm);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
@@ -35,13 +41,16 @@ export default function SeguroForm({ title = "Orce seu seguro" }) {
     "w-full h-12 px-4 rounded-lg bg-[#cfe9ff] outline-none focus:ring-2 focus:ring-blue-500";
   const labelClass = "text-sm font-semibold text-gray-800";
 
-  const isEmailValid = (email) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const isPhoneValid = (phone) =>
-    phone.replace(/\D/g, "").length >= 10;
-
   const handleChange = (e) => {
-    setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    const formattedValue =
+      name === "telefone"
+        ? formatPhoneInput(value)
+        : name === "email"
+          ? formatEmailInput(value)
+          : value;
+
+    setForm((p) => ({ ...p, [name]: formattedValue }));
     setFieldError("");
   };
 
@@ -98,14 +107,11 @@ export default function SeguroForm({ title = "Orce seu seguro" }) {
       className="bg-white rounded-3xl shadow-lg border border-gray-200
                  w-full max-w-2xl mx-auto px-8 sm:px-10 py-8 space-y-4"
     >
-      <h2 className="text-2xl font-extrabold uppercase text-center tracking-wide text-gray-900">
-        {title}
-      </h2>
-
-      <p className="text-center text-xs sm:text-sm text-gray-600 leading-snug">
-        Aqui seu orçamento é rápido. Preencha os campos e assim que possível um de
-        nossos corretores entrará em contato para te atender.
-      </p>
+      {showHeader && (
+        <h2 className="text-2xl font-extrabold uppercase text-center tracking-wide text-gray-900">
+          {title}
+        </h2>
+      )}
 
       <div>
         <label className={labelClass}>Selecione o produto desejado</label>
@@ -127,6 +133,7 @@ export default function SeguroForm({ title = "Orce seu seguro" }) {
         <label className={labelClass}>Nome</label>
         <input
           name="nome"
+          placeholder="Ex: Maria Silva"
           value={form.nome}
           onChange={handleChange}
           required
@@ -138,6 +145,10 @@ export default function SeguroForm({ title = "Orce seu seguro" }) {
         <label className={labelClass}>Telefone</label>
         <input
           name="telefone"
+          type="tel"
+          inputMode="tel"
+          autoComplete="tel"
+          placeholder="Ex: (11) 99999-9999"
           value={form.telefone}
           onChange={handleChange}
           required
@@ -150,6 +161,9 @@ export default function SeguroForm({ title = "Orce seu seguro" }) {
         <input
           name="email"
           type="email"
+          inputMode="email"
+          autoComplete="email"
+          placeholder="Ex: nome@email.com"
           value={form.email}
           onChange={handleChange}
           required

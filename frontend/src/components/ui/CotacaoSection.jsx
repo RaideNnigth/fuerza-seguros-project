@@ -56,11 +56,11 @@ export default function CotacaoSection({ initialType = null }) {
         </div>
 
         {/* FORMULÁRIOS ABAIXO DO CARD */}
-        {active === "consorcio" && <ConsorcioForm />}
+        {active === "consorcio" && <ConsorcioForm showHeader={false} />}
 
-        {active === "seguro" && <SeguroForm />}
+        {active === "seguro" && <SeguroForm showHeader={false} />}
 
-        {active === "imobiliaria" && <SolucaoImobiliariaForm />}
+        {active === "imobiliaria" && <SolucaoImobiliariaForm showHeader={false} />}
 
       </div>
     </section>

@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { LogOut } from 'lucide-react';
 import AttachmentManager from "../components/ui/AttachmentManager";
 import CreateArticle from "./CreateArticle";
 import ManagePosts from "../components/ui/ManagePosts";
 import EditPostOrder from "../components/ui/EditPostOrder";
+import WhatsAppSettings from "../components/ui/WhatsAppSettings";
 
 
 function AdminDashboard() {
@@ -56,6 +58,13 @@ function AdminDashboard() {
           onClick={() => setSection('order')}
         >
           ordenar posts
+        </button>
+
+        <button
+          className={`mb-4 px-4 py-2 rounded w-full ${section === 'whatsapp' ? 'bg-gray-700' : 'hover:bg-gray-800'}`}
+          onClick={() => setSection('whatsapp')}
+        >
+          whatsapp
         </button>
 
         <div className="flex-grow"></div>
@@ -113,6 +122,27 @@ function AdminDashboard() {
                 criar artigo
               </button>
 
+              <button
+                className={`mb-4 px-4 py-2 rounded w-full ${section === 'manage' ? 'bg-gray-700' : 'hover:bg-gray-800'}`}
+                onClick={() => { setSection('manage'); setSidebarOpen(false); }}
+              >
+                gerenciar artigos
+              </button>
+
+              <button
+                className={`mb-4 px-4 py-2 rounded w-full ${section === 'order' ? 'bg-gray-700' : 'hover:bg-gray-800'}`}
+                onClick={() => { setSection('order'); setSidebarOpen(false); }}
+              >
+                ordenar posts
+              </button>
+
+              <button
+                className={`mb-4 px-4 py-2 rounded w-full ${section === 'whatsapp' ? 'bg-gray-700' : 'hover:bg-gray-800'}`}
+                onClick={() => { setSection('whatsapp'); setSidebarOpen(false); }}
+              >
+                whatsapp
+              </button>
+
               <div className="flex-grow"></div>
 
               <button
@@ -129,11 +159,27 @@ function AdminDashboard() {
       {/* CONTEÚDO PRINCIPAL */}
       {/* ======================================================= */}
       {/* 👉 Aqui é a única alteração necessária! */}
-      <main className="flex-1 p-2 md:p-8 pt-28 md:pt-32">
+      <main className="flex-1 p-4 md:p-8">
+        <div className="mb-6 flex items-center justify-between gap-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Painel administrativo</p>
+            <h1 className="text-2xl font-bold text-gray-900">Fuerza Seguros</h1>
+          </div>
+
+          <button
+            onClick={handleLogout}
+            className="inline-flex items-center gap-2 rounded bg-gray-900 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-800"
+          >
+            <LogOut size={16} aria-hidden="true" />
+            Sair
+          </button>
+        </div>
+
         {section === 'attachments' && <AttachmentManager />}
         {section === 'create' && <CreateArticle />}
         {section === 'manage' && <ManagePosts />}
         {section === 'order' && <EditPostOrder />}
+        {section === 'whatsapp' && <WhatsAppSettings />}
       </main>
 
       {/* animação */}

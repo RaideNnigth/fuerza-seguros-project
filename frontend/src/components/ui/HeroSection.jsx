@@ -1,6 +1,53 @@
+import { useState } from 'react';
 import banner_img from '../../assets/images/fuerza/FamiliaSofa4por3-1080x1080.png';
+import API_URL from '../../config/api';
+import { formatEmailInput, isEmailValid } from '../../utils/formFormatters';
 
 export default function HeroSection() {
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setMessage('');
+    setError('');
+
+    if (!isEmailValid(email)) {
+      setError('Informe um e-mail válido.');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const res = await fetch(`${API_URL}/api/email/send`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          subject: `Lead Home - Quero saber mais - ${email}`,
+          text:
+            'Origem: Home - Quero saber mais\n' +
+            `E-mail: ${email}`,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || 'Erro ao enviar.');
+      }
+
+      setEmail('');
+      setMessage('Recebemos seu contato.');
+    } catch (err) {
+      setError(err.message || 'Erro ao conectar com o servidor.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section className="relative bg-[#1A365D] text-white overflow-hidden">
       
@@ -20,18 +67,41 @@ export default function HeroSection() {
           </p>
 
           {/* FORM */}
-          <div className="mt-6 w-full flex flex-col sm:flex-row gap-3 sm:justify-start justify-center">
+          <form
+            onSubmit={handleSubmit}
+            className="mt-6 w-full flex flex-col gap-2"
+          >
+            <div className="flex flex-col sm:flex-row gap-3 sm:justify-start justify-center">
             <input
               type="email"
+              inputMode="email"
+              autoComplete="email"
               placeholder="Digite seu melhor e-mail"
+              value={email}
+              onChange={(e) => {
+                setEmail(formatEmailInput(e.target.value));
+                setMessage('');
+                setError('');
+              }}
+              required
               className="w-full sm:w-[260px] px-4 py-2 rounded-md border border-white/30 bg-white text-gray-900 outline-none focus:ring-2 focus:ring-fuerza-laranja"
             />
             <button
+              type="submit"
+              disabled={loading}
               className="bg-fuerza-laranja text-white px-6 py-2 rounded-md font-semibold hover:bg-orange-500 transition"
             >
-              QUERO SABER MAIS
+              {loading ? 'ENVIANDO...' : 'QUERO SABER MAIS'}
             </button>
-          </div>
+            </div>
+
+            {message && (
+              <p className="text-sm font-semibold text-green-200">{message}</p>
+            )}
+            {error && (
+              <p className="text-sm font-semibold text-orange-200">{error}</p>
+            )}
+          </form>
         </div>
 
         {/* IMAGEM */}

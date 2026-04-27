@@ -49,6 +49,10 @@ app.use('/api/email', emailRoutes);
 const tagRoutes = require('./tags');
 app.use('/api/tags', tagRoutes);
 
+// Site config routes
+const siteConfigRoutes = require('./site_config');
+app.use('/api/site-config', siteConfigRoutes);
+
 const mongoDbName = process.env.MONGO_DB_NAME || 'fuerzaseguros';
 
 mongoose.connect(process.env.MONGO_URI, { dbName: mongoDbName })

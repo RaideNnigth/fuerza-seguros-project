@@ -40,11 +40,36 @@ Certifique-se de ter os seguintes componentes instalados antes de continuar:
   MONGO_URI=mongodb://localhost:27017/fuerzaseguros
   JWT_SECRET=#Token
   JWT_SECRET_REFRESH=#Token
-  EMAIL_USER=#Seu Email
-  EMAIL_PASS=#App Pass
+  EMAIL_USER=#email remetente, ex: sua-conta@gmail.com
+  EMAIL_PASS=#senha de app do Google, nao use a senha normal do Gmail
   EMAIL_SERVICE=gmail
-  EMAIL_FOR_LEAD=#email para onde mandar o lead
+  EMAIL_FOR_LEAD=#email que recebera os leads
   ```
+
+  O envio de emails usa o `nodemailer` no backend. Os formularios do frontend enviam os dados para `POST /api/email/send`; o backend monta o email e envia usando a conta configurada em `EMAIL_USER`. O destinatario dos leads e definido em `EMAIL_FOR_LEAD`.
+
+  Para usar uma conta Gmail:
+
+  1. Acesse `https://myaccount.google.com/security`.
+  2. Ative a verificacao em duas etapas na conta Google.
+  3. Acesse `https://myaccount.google.com/apppasswords`.
+  4. Gere uma senha de app para o site, por exemplo com o nome `Fuerza Site`.
+  5. Copie a senha de 16 caracteres gerada pelo Google e coloque em `EMAIL_PASS`, sem espacos.
+
+  Exemplo:
+
+  ```env
+  EMAIL_USER=minhaconta@gmail.com
+  EMAIL_PASS=abcdabcdabcdabcd
+  EMAIL_SERVICE=gmail
+  EMAIL_FOR_LEAD=contato@fuerzaseguros.com.br
+  ```
+
+  Observacoes:
+
+  - `EMAIL_PASS` deve ser a senha de app do Google, nao a senha normal da conta Gmail.
+  - Se a opcao de senha de app nao aparecer, verifique se a verificacao em duas etapas esta ativa. Ela tambem pode ficar indisponivel em contas corporativas/escolares com restricoes, contas com Protecao Avancada ou contas configuradas apenas com chave de seguranca.
+  - Se a senha da conta Google for alterada, o Google pode revogar as senhas de app. Nesse caso, gere uma nova senha e atualize `EMAIL_PASS`.
 
 - frontend/.env:
   ```env
@@ -130,10 +155,10 @@ MONGO_URI=
 MONGO_DB_NAME=fuerzaseguros
 JWT_SECRET=
 JWT_SECRET_REFRESH=
-EMAIL_USER=
-EMAIL_PASS=
+EMAIL_USER=seuemail@gmail.com
+EMAIL_PASS=senha_de_app_do_google
 EMAIL_SERVICE=gmail
-EMAIL_FOR_LEAD=
+EMAIL_FOR_LEAD=email_que_recebe_os_leads@dominio.com
 ```
 
 ### Observacoes

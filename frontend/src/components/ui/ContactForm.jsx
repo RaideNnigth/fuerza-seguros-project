@@ -1,5 +1,9 @@
 import { useState } from "react";
 import API_URL from "../../config/api";
+import {
+  formatEmailInput,
+  formatPhoneInput,
+} from "../../utils/formFormatters";
 
 const WHO_OPTIONS = [
   "Imobiliária",
@@ -35,7 +39,15 @@ export default function ContactForm({
   const [fieldError, setFieldError] = useState("");
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    const formattedValue =
+      name === "telefone"
+        ? formatPhoneInput(value)
+        : name === "email"
+          ? formatEmailInput(value)
+          : value;
+
+    setForm({ ...form, [name]: formattedValue });
     setFieldError("");
   };
 
@@ -116,11 +128,6 @@ export default function ContactForm({
         {title}
       </h2>
 
-      <p className="text-center text-xs sm:text-sm text-gray-600 leading-snug">
-        Aqui seu orçamento é rápido. Preencha os campos e assim que possível um de
-        nossos corretores entrará em contato para te atender.
-      </p>
-
       <div>
         <label className={labelClass}>Quem você é?</label>
         <select
@@ -159,6 +166,7 @@ export default function ContactForm({
         <label className={labelClass}>Nome</label>
         <input
           name="nome"
+          placeholder="Ex: Maria Silva"
           value={form.nome}
           onChange={handleChange}
           required
@@ -170,6 +178,10 @@ export default function ContactForm({
         <label className={labelClass}>Telefone</label>
         <input
           name="telefone"
+          type="tel"
+          inputMode="tel"
+          autoComplete="tel"
+          placeholder="Ex: (11) 99999-9999"
           value={form.telefone}
           onChange={handleChange}
           required
@@ -182,6 +194,9 @@ export default function ContactForm({
         <input
           name="email"
           type="email"
+          inputMode="email"
+          autoComplete="email"
+          placeholder="Ex: nome@email.com"
           value={form.email}
           onChange={handleChange}
           required

@@ -1,7 +1,8 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
+import WhatsAppFloatButton from './components/ui/WhatsAppFloatButton';
 
 import ArticleView from './components/ui/ArticleView';
 
@@ -17,11 +18,13 @@ import CreateArticle from './pages/CreateArticle';
 import PrivateRoute from './components/auth/PrivateRoute';
 
 function App() {
+  const { pathname } = useLocation();
+  const isAdminRoute = pathname.startsWith('/admin');
 
   return (
     <>
-      <Navbar />
-      <main style={{ minHeight: '80vh' }}>
+      {!isAdminRoute && <Navbar />}
+      <main style={{ minHeight: isAdminRoute ? '100vh' : '80vh' }}>
         <Routes>
 
           <Route path="/" element={<Home />} /> 
@@ -56,7 +59,8 @@ function App() {
 
         </Routes>
       </main>
-      <Footer />
+      {!isAdminRoute && <Footer />}
+      {!isAdminRoute && <WhatsAppFloatButton />}
     </>
   );
 }

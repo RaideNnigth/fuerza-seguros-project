@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { ExternalLink } from 'lucide-react';
 import API_URL from '../../config/api';
 import CreateArticle from '../../pages/CreateArticle';
 
@@ -72,7 +73,16 @@ export default function ManagePosts() {
                   <h3 className="font-semibold">{post.title}</h3>
                   <p className="text-sm text-gray-500">Autor: {post.author}</p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap justify-end gap-2">
+                  <a
+                    href={`/blog/${post._id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 px-3 py-1 rounded bg-slate-700 text-white hover:bg-slate-800"
+                  >
+                    <ExternalLink size={15} aria-hidden="true" />
+                    Ver no site
+                  </a>
                   <button
                     onClick={() => toggleActive(post._id, post.active)}
                     className={`px-3 py-1 rounded text-white ${post.active === 'y' ? 'bg-yellow-500' : 'bg-green-600'}`}
