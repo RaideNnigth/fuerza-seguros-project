@@ -10,6 +10,8 @@ const fs = require('fs');
 const app = express();
 
 const allowedOrigins = [
+  'https://www.fuerzaseguros.com.br',
+  'https://fuerzaseguros.com.br',
   'https://fuerza-seguros-project.vercel.app',
   'http://localhost:5173'
 ];

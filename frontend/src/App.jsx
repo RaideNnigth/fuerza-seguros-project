@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import WhatsAppFloatButton from './components/ui/WhatsAppFloatButton';
+import SEO from './components/SEO';
 
 import ArticleView from './components/ui/ArticleView';
 
@@ -23,6 +24,7 @@ function App() {
 
   return (
     <>
+      <SEO noIndex={isAdminRoute} />
       {!isAdminRoute && <Navbar />}
       <main style={{ minHeight: isAdminRoute ? '100vh' : '80vh' }}>
         <Routes>

@@ -1,11 +1,22 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import API_URL from "../../config/api";
+import SEO from "../SEO";
+import { SITE_URL } from "../../config/seo";
 
 import Carousel from "./Carousel";
 import RelatedPosts from "./RelatedPosts";
 import CotacaoSection from "./CotacaoSection";
 import { optimizeAttachmentImagesInHtml } from "../../utils/attachmentUrls";
+
+function getExcerpt(html = "", length = 155) {
+  return html
+    .replace(/<img[^>]*>/gi, "")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, length);
+}
 
 export default function ArticleView() {
   const { slug } = useParams();
@@ -22,9 +33,11 @@ export default function ArticleView() {
           _id: data._id,
           title: data.title,
           html: optimizeAttachmentImagesInHtml(data.htmlContent),
+          excerpt: getExcerpt(data.htmlContent),
           category: data.tags?.[0] || "Blog",
           date: new Date(data.createdAt).toLocaleDateString("pt-BR"),
           author: data.author || "Equipe Fuerza",
+          createdAt: data.createdAt,
           headings: [],
           images: [],
         });
@@ -50,6 +63,12 @@ export default function ArticleView() {
   if (!article) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center bg-white">
+        <SEO
+          title="Artigo nao encontrado | Fuerza Seguros"
+          description="O artigo solicitado nao foi encontrado."
+          path={`/blog/${slug}`}
+          noIndex
+        />
         <div className="max-w-2xl mx-auto p-10 text-center bg-white rounded-2xl shadow-lg border border-slate-100">
           <h1 className="text-2xl font-bold mb-4 text-slate-900">
             Artigo não encontrado
@@ -68,6 +87,28 @@ export default function ArticleView() {
 
   return (
     <div className="bg-white pt-24 md:pt-28">
+      <SEO
+        title={`${article.title} | Fuerza Seguros`}
+        description={article.excerpt}
+        path={`/blog/${slug}`}
+        type="article"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: article.title,
+          description: article.excerpt,
+          author: {
+            "@type": "Organization",
+            name: article.author,
+          },
+          publisher: {
+            "@type": "Organization",
+            name: "Fuerza Seguros",
+          },
+          datePublished: article.createdAt,
+          mainEntityOfPage: `${SITE_URL}/blog/${slug}`,
+        }}
+      />
       <article className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
         {/* Header clean */}
         <header className="mb-8 text-center">
