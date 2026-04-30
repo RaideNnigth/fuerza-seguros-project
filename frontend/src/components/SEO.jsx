@@ -56,7 +56,7 @@ export default function SEO({
   const pageDescription =
     description || routeSeo.description || DEFAULT_SEO.description;
   const cleanPath = path || pathname;
-  const canonical = `${SITE_URL}${cleanPath === "/" ? "" : cleanPath}`;
+  const canonical = `${SITE_URL}${cleanPath === "/" ? "/" : cleanPath}`;
   const absoluteImage = image?.startsWith("http")
     ? image
     : `${SITE_URL}${image?.startsWith("/") ? image : `/${image}`}`;
